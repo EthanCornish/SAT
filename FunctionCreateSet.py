@@ -5,34 +5,42 @@ def CreateSet(listSetName):
     print('Enter the name of the file to save the set in.')
     fileName = input(':')
     listSet = []
-    listSet[0].append(setName)
+    listSet.append(setName)
     listSetNameSub = [setName, fileName]
     listSetName.append(listSetNameSub)
 
     number = 1
     create = True
+    listCard = []
     while create:
-        create = False
-        print('Enter infomation for card number {0} to be?'.format(number))
+        print('Enter information for card number {0}.'.format(number))
         side1 = input('Term:')
+        if side1 == '':
+            create = False
+            break
         side2 = input('Definition:')
         image = input('Directory for image:')
 
         listCardSub = [side1, side2, image]
-        listSet[0][number-1].append(listCardSub)
+        listCard.append(listCardSub)
         print('Your card, {0}, {1}, {2} has been saved as card number {3}.'.format(side1, side2, image, number))
 
         number = number + 1
-        next = input('Another Card? "Yes", "No"')
-        if next == 'Yes' or next == 'yes':
-            create = True
+
+    listSet.append(listCard)
 
     file = open(fileName, 'w')
     file.write(setName)
     file.write('\n')
-    for element in listSet[1]:
-        file.write(element)
+    for a in listSet[1]:
+        for b in a:
+            file.write(b)
+            file.write(',')
         file.write('\n')
     file.close()
 
     return listSetName
+
+
+listSetName = []
+CreateSet(listSetName)
