@@ -1,3 +1,5 @@
+#from FunctionMain import listSetName
+
 
 def CreateSet(listSetName):
     print('Enter a Name for the set.')
@@ -40,7 +42,3 @@ def CreateSet(listSetName):
     file.close()
 
     return listSetName
-
-
-listSetName = []
-CreateSet(listSetName)
