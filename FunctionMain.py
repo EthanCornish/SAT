@@ -7,8 +7,8 @@ from FunctionHelp import Help
 from FunctionDeleteSet import DeleteSet
 
 
-#listSetName = []
-#global listSetName
+# listSetName = []
+# global listSetName
 
 # Main Function for CLI
 def MainCLI():
@@ -29,10 +29,14 @@ def MainCLI():
         print('FileNotFound (fileListSetName.txt)')
         listSetName = []
 
+    currentSetName = listSetName[-1][0]
+    currentSetFile = listSetName[-1][1]
 
     # menu while loop that calls each a function for each action
     menuActive = True
     while menuActive:
+        print('\nYour currently selected set is {0} in file {1}.'.format(currentSetName, currentSetFile))
+        print('Choosing a view option will view this set.')
         print('\nSelect an Option by entering the corresponding number.')
         print('1:  Create')
         print('2:  Select a Different Set')
@@ -41,28 +45,30 @@ def MainCLI():
         print('5:  Help')
         print('6:  Delete Set')
         print('7:  Exit')
-        menuInput = input(': ')
+        menuInput = input('Option:')
 
         if menuInput == '1':
-            print('Create Set Option Chosen')
+            print('Create Set Option Chosen\n')
             CreateSet(listSetName)
         elif menuInput == '2':
-            print('Select a Different Set Option Chosen')
-            SelectSet(listSetName)
+            print('Select a Different Set Option Chosen\n')
+            setPosition = SelectSet(listSetName)
+            currentSetName = listSetName[setPosition][0]
+            currentSetFile = listSetName[setPosition][1]
         elif menuInput == '3':
-            print('View Overview Option Chosen')
-            ViewOverview(listSetName)
+            print('View Overview Option Chosen\n')
+            ViewOverview(listSetName, currentSetName, currentSetFile)
         elif menuInput == '4':
-            print('View Set Option Chosen')
-            ViewSet(listSetName)
+            print('View Set Option Chosen\n')
+            ViewSet(listSetName, currentSetName, currentSetFile)
         elif menuInput == '5':
-            print('Help Option Chosen')
+            print('Help Option Chosen\n')
             Help()
         elif menuInput == '6':
-            print('Delete Set Option Chosen')
+            print('Delete Set Option Chosen\n')
             DeleteSet(listSetName)
         elif menuInput == '7':
-            print('Exit Option Chosen')
+            print('Exit Option Chosen\n')
             menuActive = False
             break
         else:
