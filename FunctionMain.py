@@ -7,9 +7,6 @@ from FunctionHelp import Help
 from FunctionDeleteSet import DeleteSet
 
 
-# listSetName = []
-# global listSetName
-
 # Main Function for CLI
 def MainCLI():
     # Define listSetName list as empty before reading from file
@@ -26,7 +23,6 @@ def MainCLI():
             listSetName.append(line)
         fileListSetName.close()
     except FileNotFoundError:
-        print('FileNotFound (fileListSetName.txt)')
         listSetName = []
 
     currentSetName = listSetName[-1][0]

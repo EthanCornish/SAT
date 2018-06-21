@@ -9,7 +9,6 @@ def SelectSet(listSetName):
     for i in listSetName:
         if i[0] == wantedSet:
             print('{0} was found and has been selected.'.format(wantedSet))
-            print('position =', position)
             return position
         position += 1
 
