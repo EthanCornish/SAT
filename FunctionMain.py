@@ -31,7 +31,7 @@ def MainCLI():
     # menu while loop that calls each a function for each action
     menuActive = True
     while menuActive:
-        print('\nYour currently selected set is {0} in file {1}.'.format(currentSetName, currentSetFile))
+        print("\nYour currently selected set is '{0}' in file '{1}'.".format(currentSetName, currentSetFile))
         print('Choosing a view option will view this set.')
         print('\nSelect an Option by entering the corresponding number.')
         print('1:  Create')
@@ -55,7 +55,7 @@ def MainCLI():
             currentSetFile = listSetName[setPosition][1]
         elif menuInput == '3':
             print('View Overview Option Chosen\n')
-            ViewOverview(listSetName, currentSetName, currentSetFile)
+            ViewOverview(currentSetName, currentSetFile)
         elif menuInput == '4':
             print('View Set Option Chosen\n')
             ViewSet(listSetName, currentSetName, currentSetFile)
@@ -70,7 +70,7 @@ def MainCLI():
             menuActive = False
             break
         else:
-            'The option you have chosen is invalid.\nTry Again\n\n'
+            print('The option you have chosen is invalid.\nTry Again\n\n')
 
 
     # Saving listSetName to the file to save it for the next execution

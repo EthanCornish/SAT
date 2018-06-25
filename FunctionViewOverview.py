@@ -1,5 +1,5 @@
 
-def ViewOverview(listSetName, setName, setFile):
+def ViewOverview(setName, setFile):
     # Reading file and creating listSet
     # This may be put in a different function to be used by FunctionViewOverview and FunctionViewSet
     file = open(setFile, 'r')

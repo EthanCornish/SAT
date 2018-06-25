@@ -4,6 +4,7 @@ import os
 def DeleteSet(listSetName, setName, fileName):
     position = 0
     found = False
+    setToDelete = ''
     while not found:
         for set in listSetName:
             print('set[0] =', set[0])
