@@ -46,6 +46,8 @@ def MainCLI():
         if menuInput == '1':
             print('Create Set Option Chosen\n')
             CreateSet(listSetName)
+            currentSetName = listSetName[-1][0]
+            currentSetFile = listSetName[-1][1]
         elif menuInput == '2':
             print('Select a Different Set Option Chosen\n')
             setPosition = SelectSet(listSetName)
@@ -62,7 +64,7 @@ def MainCLI():
             Help()
         elif menuInput == '6':
             print('Delete Set Option Chosen\n')
-            DeleteSet(listSetName)
+            DeleteSet(listSetName, currentSetName, currentSetFile)
         elif menuInput == '7':
             print('Exit Option Chosen\n')
             menuActive = False
@@ -80,5 +82,6 @@ def MainCLI():
         fileListSetName.write('\n')
 
     return
+
 
 MainCLI()

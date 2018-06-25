@@ -41,4 +41,6 @@ def CreateSet(listSetName):
         file.write('\n')
     file.close()
 
+    print('Set Saved')
+
     return listSetName

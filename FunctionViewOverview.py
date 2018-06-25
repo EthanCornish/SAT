@@ -21,7 +21,7 @@ def ViewOverview(listSetName, setName, setFile):
     listSet.append(listCard)
 
     print('\nShowing an overview for {0}\n'.format(setName))
-    print('Term,    Definition   Image')
+    print('Term,    Definition,   Image')
     for card in listSet[1]:
         print('{0},      {1},         {2}'.format(card[0], card[1], card[2]))
     return

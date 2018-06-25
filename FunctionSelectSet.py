@@ -4,7 +4,6 @@ def SelectSet(listSetName):
     for set in listSetName:
         print("  {0} in file: {1}".format(set[0], set[1]))
     wantedSet = input('\nName of wanted Set:')
-    print('wantedSet =', wantedSet)
     position = 0
     for i in listSetName:
         if i[0] == wantedSet:
