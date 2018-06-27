@@ -34,7 +34,7 @@ def MainCLI():
         print("\nYour currently selected set is '{0}' in file '{1}'.".format(currentSetName, currentSetFile))
         print('Choosing a view option will view this set.')
         print('\nSelect an Option by entering the corresponding number.')
-        print('1:  Create')
+        print('1:  Create Set')
         print('2:  Select a Different Set')
         print('3:  View Overview of Set')
         print('4:  View Set')

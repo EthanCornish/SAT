@@ -1,4 +1,4 @@
-#from FunctionMain import listSetName
+# from FunctionMain import listSetName
 
 
 def CreateSet(listSetName):
@@ -22,8 +22,9 @@ def CreateSet(listSetName):
             break
         side2 = input('Definition:')
         image = input('Directory for image:')
+        isFav = 'no'
 
-        listCardSub = [side1, side2, image]
+        listCardSub = [side1, side2, image, isFav]
         listCard.append(listCardSub)
         print('Your card, {0}, {1}, {2} has been saved as card number {3}.'.format(side1, side2, image, number))
 
