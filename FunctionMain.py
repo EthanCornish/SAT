@@ -58,7 +58,7 @@ def MainCLI():
             ViewOverview(currentSetName, currentSetFile)
         elif menuInput == '4':
             print('View Set Option Chosen\n')
-            ViewSet(listSetName, currentSetName, currentSetFile)
+            ViewSet(currentSetName, currentSetFile)
         elif menuInput == '5':
             print('Help Option Chosen\n')
             Help()
