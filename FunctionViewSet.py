@@ -85,7 +85,6 @@ def ViewSet(setName, setFile):
     while number < len(listSet[1]):
 
 
-       # elif viewFullFav == '2' and listSet[1][number][3] == 'no':
 
         menuActive = True
         while menuActive:
