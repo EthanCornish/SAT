@@ -22,11 +22,22 @@ def ViewSet(setName, setFile):
     print('listSet =', listSet)
 
     # Need to write actual viewing code with viewing options
-    # Options on each card: previous, term, image, definition, next, star the card
-
     # FlipMode, defaultSide, cardOrder, ViewFullFav
 
-    # setting the DefaultSideOpption
+    # setting the FlipModeOption
+    print('\nFlip Mode:\n1: Manual\n2: Automatic')
+    flipModeInput = input(': ')
+    if flipModeInput == '1':
+        flipMode = 'manual'
+        print('The flip mode has been set to manual')
+    elif flipModeInput == '2':
+        flipMode = 'auto'
+        print('The flip mode has been set to automatic')
+    else:
+        defaultSide = 'manual'
+        print('Invalid input was entered for the flip mode.\nIt has been set to manual.')
+
+    # setting the DefaultSideOption
     print('\nDefault Side Shown:\n1: Term\n2: Definition\n3: Image')
     defaultSideInput = input(':')
     if defaultSideInput == '1':
@@ -43,7 +54,7 @@ def ViewSet(setName, setFile):
         print('Invalid input was entered for the default side.\nIt has been set to term.')
 
     # setting the CardOrderOption
-    print('\nCard Order:\n1: Origional\n2: Random')
+    print('\nCard Order:\n1: Original\n2: Random')
     cardOrderInput = input(': ')
     if cardOrderInput == '1':
         cardOrder = 'Org'
