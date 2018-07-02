@@ -7,7 +7,6 @@ def DeleteSet(listSetName, setName, fileName):
     setToDelete = ''
     while not found:
         for set in listSetName:
-            print('set[0] =', set[0])
             if set[0] == setName:
                 setToDelete = set[0]
                 found = True
@@ -23,11 +22,8 @@ def DeleteSet(listSetName, setName, fileName):
             print('{0} has been deleted.'.format(setToDelete))
             completed = True
             # Delete the set from listSetName
-            print('listSetName Pre Deleting', setName, listSetName)
-            print('position =', position)
             listSetName.pop(position)
             os.remove(fileName)
-            print('listSetName Post Deleting',setName, listSetName)
 
         elif confirm == 'No' or confirm == 'no':
             print('{0} has not been deleted.'.format(setToDelete))
