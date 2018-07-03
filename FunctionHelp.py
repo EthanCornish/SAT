@@ -1,5 +1,8 @@
 
+# Note there is no information available for help as it requires the GUI to be completed first.
+
 def Help():
+    # Setting the variables that will contain the text on how to use different parts of the program
     help1 = 'Help 1: Using the main menu'
     help2 = 'Help 2: Creating Sets'
     help3 = 'Help 3: Editing Sets'
@@ -9,8 +12,10 @@ def Help():
     help7 = 'Help 7: Deleting Sets'
     help8 = 'Help 8: Importing and Exporting Sets'
 
+    # Menu for help in different areas of the program
     MenuActive = True
     while MenuActive:
+        # Menu Options for the user
         print('\n\nSelect the following option to chose which are you need help using.')
         print('1: Using the main menu and exiting the program.')
         print('2: Creating Sets')
@@ -23,6 +28,7 @@ def Help():
         print('9: Exit Help')
         menuOption = input('Option:')
 
+        # If statement to call a variable depending which option the user entered.
         if menuOption == '1':
             print(help1)
         elif menuOption == '2':
@@ -44,5 +50,6 @@ def Help():
             menuActive = False
             break
         else:
+            # Lets the user re enter input
             print('The option you have selected is invalid\nTry Again\n')
     return

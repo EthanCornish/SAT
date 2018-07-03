@@ -1,8 +1,38 @@
 import random
 
+def CardOrder(currentCardNumber, listSet, shownCards):
+    shownCards.append(currentCardNumber)
+    x = 0
+    run = True
+    while run:
+        x = random.randint(0, len(listSet[1])-1)
+        x = int(x)
+        cycle = 0
+        results = []
+        while cycle < len(shownCards):
+            if x == shownCards[cycle]:
+                found = 'yes'
+            elif x != shownCards[cycle]:
+                found = 'no'
+            else:
+                found = ''
+            results.append(found)
+            cycle += 1
+        for i in results:
+            if i == 'yes':
+                run = True
+                break
+            elif i == 'no':
+                run = False
+        if len(shownCards) == len(listSet[1]):
+            print('DEBUG all cards shown, returning x as greater than number to catch condition in ViewSet function')
+            x = len(listSet[1])
+            return x
+
+    return x
+
 def ViewSet(setName, setFile):
     # Reading file and creating listSet
-    # This may be put in a different function to be used by FunctionViewOverview and FunctionViewSet
     file = open(setFile, 'r')
     listSet = []
     fileSetName = file.readline()
@@ -21,24 +51,10 @@ def ViewSet(setName, setFile):
             listCardSub.append(line[3])
             listCard.append(listCardSub)
     listSet.append(listCard)
-    print('listSet =', listSet)
 
     # Need to write actual viewing code with viewing options
     # Done: defaultSide, ViewFullFav
-    # To be completed: FlipMode, cardOrder
-
-    # setting the FlipModeOption
-    print('\nFlip Mode:\n1: Manual\n2: Automatic')
-    flipModeInput = input(': ')
-    if flipModeInput == '1':
-        flipMode = 'manual'
-        print('The flip mode has been set to manual')
-    elif flipModeInput == '2':
-        flipMode = 'auto'
-        print('The flip mode has been set to automatic')
-    else:
-        defaultSide = 'manual'
-        print('Invalid input was entered for the flip mode.\nIt has been set to manual.')
+    # card Order is in progress. previous card is a bit buggy and does not work properly with ViewFullFav
 
     # setting the DefaultSideOption
     print('\nDefault Side Shown:\n1: Term\n2: Definition\n3: Image')
@@ -85,10 +101,11 @@ def ViewSet(setName, setFile):
 
     print('\n\nShowing the cards for {0}'.format(setName))
     number = 0
-    while number <= len(listSet[1]):
-        print('DEBUG 2 number =', number)
-        menuActive = True
-        while menuActive:
+    cycles = 0
+    shownCards = []
+    while number < len(listSet[1]):
+        #menuActive = True
+        #while menuActive:
             menuOption = '0'
             if viewFullFav == 'Full' or viewFullFav == 'Star' and listSet[1][number][3] == 'yes':
 
@@ -96,8 +113,6 @@ def ViewSet(setName, setFile):
                 if viewFullFav == 'Full':
                     # Displaying the default side
                     if defaultSide == 'Term':
-                        print('len(listSet[1] =', len(listSet[1]))
-                        print('len(listSet[1][number] =', len(listSet[1][number]))
                         print('Term: {0}'.format(listSet[1][number][0]))
                     elif defaultSide == 'Def':
                         print('Definition: {0}'.format(listSet[1][number][1]))
@@ -127,10 +142,24 @@ def ViewSet(setName, setFile):
 
                     if menuOption == '1':
                         print('Previous Card Selected')
-                        if listSet[1][number - 1][3] == 'no' and number - 1 == 0:
-                            print('There are no previous cards that are marked as starred.\n')
-                        number -= 1
-                        subMenuActive = False
+                        if cardOrder == 'Org':
+                            if listSet[1][number - 1][3] == 'no' and number - 1 == 0:
+                                print('There are no previous cards that are marked as starred.\n')
+                            number -= 1
+                        elif cardOrder == 'Rnd':
+                            if len(shownCards) == 1:
+                                x = shownCards[0]
+                            else:
+                                shownCardsReversed = shownCards.copy()
+                                shownCardsReversed.reverse()
+                                try:
+                                    x = shownCardsReversed[cycles]
+                                except IndexError:
+                                    print('No previous card to go back to.')
+                                    number = len(listSet[1])
+                                    break
+                                cycles += 1
+                            number = x
                         break
                     elif menuOption == '2':
                         print('\nView Term Selected')
@@ -146,20 +175,9 @@ def ViewSet(setName, setFile):
                         if cardOrder == 'Org':
                             number += 1
                         elif cardOrder == 'Rnd':
-                            x = -1
-                            print('number =', number)
-                            print('x =', x)
-                            print('len(listSet[1]) =', len(listSet[1]))
-                            x = random.randint(0,len(listSet[1]))
-                            x = int(x)
-                            if x == number:
-                                x = random.randint(0, len(listSet[1])-1)
-                                x = int(x)
-                            print('number =', number)
-                            print('x =', x)
+                            x = CardOrder(number, listSet, shownCards)
                             number = x
-
-                        subMenuActive = False
+                        cycles -= 1
                         break
                     elif menuOption == '6':
                         if listSet[1][number][3] == 'no':
@@ -180,17 +198,10 @@ def ViewSet(setName, setFile):
                                 file.write(',')
                             file.write('\n')
                         file.close()
-
                         return
             else:
-                print('else block after menuOptions run')
                 if menuOption != '1':
                     number += 1
-            #if number == len(listSet):
-            print('DEBUG 1 number =', number)
-            print('DEBUG 1 len(listSet[1])', len(listSet[1]))
-            menuActive = False
-            #    break
 
     print('There are no more cards. Exiting View Set.')
 

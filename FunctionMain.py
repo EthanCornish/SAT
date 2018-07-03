@@ -42,7 +42,8 @@ def MainCLI():
     menuActive = True
     while menuActive:
         # Infomation about each menu option
-        print("\nYour currently selected set is '{0}' in file '{1}'.".format(currentSetName, currentSetFile))
+        print('\n\n----------------------------------------==========----------------------------------------')
+        print("Your currently selected set is '{0}' in file '{1}'.".format(currentSetName, currentSetFile))
         print('Choosing a view option will view this set.')
         print('\nSelect an Option by entering the corresponding number.')
         print('1:  Create Set')
@@ -54,7 +55,7 @@ def MainCLI():
         print('7:  Export Set')
         print('8:  Help')
         print('9:  Delete Set')
-        print('10:  Exit')
+        print('10: Exit')
         menuInput = input('Option:')
 
         # if block to call each menu function

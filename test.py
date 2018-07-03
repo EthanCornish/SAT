@@ -1,10 +1,2 @@
 
-print('Hello World\n')
-
-x = 1
-
-while x <= 10:
-  print(x)
-  x +=1
- 
-print('\nI can count')
+print('Hello World')
