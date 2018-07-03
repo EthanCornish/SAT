@@ -1,4 +1,3 @@
-
 # Note there is no information available for help as it requires the GUI to be completed first.
 
 def Help():

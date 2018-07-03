@@ -1,4 +1,5 @@
 
+
 def EditSet(setName, setFile):
     # Reading file and creating listSet
     # This may be put in a different function to be used by FunctionViewOverview and FunctionViewSet
