@@ -36,9 +36,9 @@ def EditSet(setName, setFile):
     # While loop for existing cards
     while create:
         print('Enter information for card number {0}.'.format(number))
-        # Telling the user what the current information is, getting new information. Repeats for definition and image
+        # Telling the user what the current information is, getting new information. Repeats for definition and imageDir
         print('Current Term: {0}'.format(listSet[1][number-1][0]))
-        # if the new input is different changing the old input to the new version. Repeats for definition and image
+        # if the new input is different changing the old input to the new version. Repeats for definition and imageDir
         side1New = input('New Term: ')
         if side1New != '':
             side1 = side1New
@@ -53,21 +53,22 @@ def EditSet(setName, setFile):
             side2 = listSet[1][number - 1][1]
 
         print('Current Image Directory: {0}'.format(listSet[1][number - 1][2]))
-        imageNew = input('New Image Directory: ')
-        if imageNew != '':
-            image = imageNew
+        print('Current Image Directory: {0}'.format(listSet[1][number - 1][2]))
+        imageDirNew = input('New Image Directory: ')
+        if imageDirNew != '':
+            imageDir = imageDirNew
         else:
-            image = listSet[1][number - 1][2]
+            imageDir = listSet[1][number - 1][2]
 
         # Setting the isFav to the previous isFav
 
         isFav = listSet[1][number-1][3]
 
         # Adding card information to listCardSub then adding listCardSub to listCard
-        listCardSub = [side1, side2, image, isFav]
+        listCardSub = [side1, side2, imageDir, isFav]
         listCard.append(listCardSub)
         # Telling the user what their card is
-        print('Your card: {0}, {1}, {2} has been saved as card number {3}.\n'.format(side1, side2, image, number))
+        print('Your card: {0}, {1}, {2} has been saved as card number {3}.\n'.format(side1, side2, imageDir, number))
 
         # Adding a value to number and checking if the next card exists to prevent and Index Error
         number = number + 1
@@ -92,12 +93,12 @@ def EditSet(setName, setFile):
                 create = False
                 break
             side2 = input('Definition:')
-            image = input('Directory for image:')
+            imageDir = input('Directory for image:')
             isFav = 'no'
 
-            listCardSub = [side1, side2, image, isFav]
+            listCardSub = [side1, side2, imageDir, isFav]
             listCard.append(listCardSub)
-            print('Your card, {0}, {1}, {2} has been saved as card number {3}.'.format(side1, side2, image, number))
+            print('Your card, {0}, {1}, {2} has been saved as card number {3}.'.format(side1, side2, imageDir, number))
 
             number = number + 1
 

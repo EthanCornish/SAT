@@ -3,7 +3,7 @@
 import os
 
 
-def DeleteSet(listSetName, setName, fileName):
+def DeleteSet(listSetName, setName, setFile):
     # Searching for the wanted set in listSetName.
     position = 0
     found = False
@@ -32,7 +32,7 @@ def DeleteSet(listSetName, setName, fileName):
             # Delete the set from listSetName
             listSetName.pop(position)
             # Deleting the file containing the set
-            os.remove(fileName)
+            os.remove(setFile)
             # Tells the user the set has been deleted
             print('{0} has been deleted.'.format(setToDelete))
         # Exits the while loop if the user does not want to delete the set

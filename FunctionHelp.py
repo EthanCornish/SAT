@@ -9,7 +9,10 @@ def Help():
     help5 = 'Help 5: Viewing an Overview of Sets'
     help6 = 'Help 6: Viewing Sets'
     help7 = 'Help 7: Deleting Sets'
-    help8 = 'Help 8: Importing and Exporting Sets'
+    help8 = "Help 8: Imxporting and Exporting Sets.\n" \
+            "If unsure go to the file on your mac, right-click it and select 'Get Info' (Command-i). The directory is" \
+     "under 'where:' highlight the information. E.g. /Users/19ecornish/Downloads  And add '/NameOfFile'. If the"
+    "file has an extension E.g. '.txt.' you will need to add that as well."
 
     # Menu for help in different areas of the program
     MenuActive = True

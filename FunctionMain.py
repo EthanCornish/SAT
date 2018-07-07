@@ -9,6 +9,10 @@ from FunctionSelectSet import SelectSet
 from FunctionViewOverview import ViewOverview
 # Importing the 'ViewSet' Function
 from FunctionViewSet import ViewSet
+# Importing the 'ImportSet' Function
+from FunctionImportSet import ImportSet
+# Importing the 'ExportSet' Function
+from FunctionExportSet import ExportSet
 # Importing the 'Help' Function
 from FunctionHelp import Help
 # Importing the 'DeleteSet' Function
@@ -42,7 +46,7 @@ def MainCLI():
     # menu while loop that calls each a function for each action
     menuActive = True
     while menuActive:
-        # Infomation about each menu option
+        # Information about each menu option
         print('\n\n----------------------------------------==========----------------------------------------')
         print("Your currently selected set is '{0}' in file '{1}'.".format(currentSetName, currentSetFile))
         print('Choosing a view option will view this set.')
@@ -62,9 +66,9 @@ def MainCLI():
         # if block to call each menu function
         if menuInput == '1':
             # Runs the create set function
-            # Reset the current set to the one just created
             print('Create Set Option Chosen\n')
             CreateSet(listSetName)
+            # Reset the current set to the one just created
             currentSetName = listSetName[-1][0]
             currentSetFile = listSetName[-1][1]
         elif menuInput == '2':
@@ -73,9 +77,9 @@ def MainCLI():
             EditSet(currentSetName, currentSetFile)
         elif menuInput == '3':
             # Runs the select set function
-            # Uses the output from the function to set the new current set
             print('Select a Different Set Option Chosen\n')
             setPosition = SelectSet(listSetName)
+            # Uses the output from the function to set the new current set
             currentSetName = listSetName[setPosition][0]
             currentSetFile = listSetName[setPosition][1]
         elif menuInput == '4':
@@ -86,6 +90,14 @@ def MainCLI():
             # Runs the view set function
             print('View Set Option Chosen\n')
             ViewSet(currentSetName, currentSetFile)
+        elif menuInput == '6':
+            # Runs the import set function
+            print('Import Set Option Chosen')
+            ImportSet(listSetName)
+        elif menuInput == '7':
+            # Runs the export set function
+            print('Export Set Option Chosen')
+            ExportSet(currentSetName, currentSetFile)
         elif menuInput == '8':
             # Runs the help function
             print('Help Option Chosen\n')
@@ -97,7 +109,6 @@ def MainCLI():
         elif menuInput == '10' or menuInput == '0':
             # Exits the program by finishing the loop.
             print('Exit Option Chosen\n')
-            menuActive = False
             break
         else:
             # Informs the user of invalid input for menuInput and allows repeated trials
@@ -110,6 +121,7 @@ def MainCLI():
         fileListSetName.write(',')
         fileListSetName.write(set[1])
         fileListSetName.write('\n')
+    fileListSetName.close()
 
     return
 
