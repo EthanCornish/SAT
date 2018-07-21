@@ -1,0 +1,30 @@
+           0                    1       2       3                   4
+[ [1,2,3,4,5,6,7,8,9,10,11], [1,11], [1,11], [0,1,11], [0,1,2,3,4,5,6,7,8,9,10,11],
+    [1,7,9,11], [1,7,9,10,11], [1,7,9,11], [0,1,2,3,4,5,6,7,8,9,10,11] ]
+             5            6             7                  8
+
+
+# Column 0
+count0 = 1
+while count0 < 12:
+    if (count0 % 2):
+        colour = 'blue'
+    else:
+        colour = 'green'
+    self.LblBlank0A = Label(self.FmePage1ViewSet, height='1', width='10', bg=colour, text='abc')
+    self.LblBlank0A.grid(row=count0, column=0, rowspan=10)
+    print('count1 =', count0)
+    count0 += 1
+# Column 1
+self.LblBlank1A = Label(self.FmePage1ViewSet, height='1', width='10', bg='red', text='abc')
+self.LblBlank1A.grid(column=1, row=1)
+self.LblBlank1B = Label(self.FmePage1ViewSet, height='1', width='10', bg='red', text='abc')
+self.LblBlank1B.grid(column=1,row=11)
+# Column 2
+self.LblBlank1A = Label(self.FmePage1ViewSet, height='1', width='10', bg='red', text='abc')
+self.LblBlank1A.grid(column=1, row=0)
+self.LblBlank1B = Label(self.FmePage1ViewSet, height='1', width='10', bg='red', text='abc')
+self.LblBlank1B.grid(column=1, row=1)
+self.LblBlank1B = Label(self.FmePage1ViewSet, height='1', width='10', bg='red', text='abc')
+self.LblBlank1B.grid(column=1, row=11)
+# Column 3
