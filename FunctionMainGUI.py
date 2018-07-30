@@ -27,9 +27,11 @@ class GUI:
 
             # Widget 2
 
+            # Creating List
+
             self.count = 0
             self.cards = []
-            while self.count < 12:
+            while self.count < 24:
                 self.VarCardT = StringVar()
                 self.VarCardT = ('term' + str(self.count))
 
@@ -45,8 +47,26 @@ class GUI:
             # Defining a temporary variable to store the number of card for determining table size
             self.noCards = (len(self.cards) * 2) + 3
 
+
+            # Creating the scroll bar through a frame in a canvas in a frame
+
+            def CanvasConfig(event):
+                self.canvas.configure(scrollregion=self.canvas.bbox("all"), width=490, height=600)
+            self.FmeSbTop = Frame(self.FmePage1ViewOverview)
+            self.FmeSbTop.grid(row=2, column=1, rowspan=(len(self.cards) * 3) + (len(self.cards)) + 3, columnspan=3)
+            self.canvas = Canvas(self.FmeSbTop)
+            self.FmeSbSub = Frame(self.canvas, width=530, height=600)
+            self.ScrollBar = Scrollbar(self.FmeSbTop, orient='vertical', command=self.canvas.yview)
+            self.canvas.configure(yscrollcommand=self.ScrollBar.set)
+            self.ScrollBar.pack(side='right', fill='y')
+            self.canvas.pack(side='left')
+            self.canvas.create_window((0,0), window=self.FmeSbSub,anchor='nw')
+            self.FmeSbSub.bind('<Configure>', CanvasConfig)
+
+
+
             # Creating the View Frame
-            self.FmeTableView = Frame(self.FmePage1ViewOverview)
+            self.FmeTableView = Frame(self.FmeSbSub)
             # Grid line is below as it uses a variable to determine rowspan
 
             # Header for 'Term' Column
@@ -72,6 +92,7 @@ class GUI:
 
             # Placing the table in the grid so it appears by default
             self.FmeTableView.grid(row=2, column=1, rowspan=(len(self.cards) * 3) + (len(self.cards)) + 3, columnspan=3)
+
 
             # Setting the content for the 'Term' Column
             self.count = 0
@@ -142,7 +163,7 @@ class GUI:
             # Edit Table
 
             # Creating the frame
-            self.FmeTableEdit = Frame(self.FmePage1ViewOverview)
+            self.FmeTableEdit = Frame(self.FmeSbSub)
 
             # Header for 'Term' Column
             self.LblTermHeader = Label(self.FmeTableEdit, text='Term', width=12, height=1)
@@ -362,7 +383,7 @@ class GUI:
             self.countBlank = 0
             while self.countBlank < 9:
                 for i in blanks[self.countBlank]:
-                    self.LblBlank = Label(self.FmePage1ViewOverview, height=1, width=8, bg='green', text='abc')
+                    self.LblBlank = Label(self.FmePage1ViewOverview, height=1, width=8)
                     self.LblBlank.config(font=('Arial', 10))
                     # self.LblBlank = Label(self.FmePage1ViewOverview, height=1, width=8)
                     self.LblBlank.grid(row=i, column=self.countBlank)
@@ -425,14 +446,16 @@ class GUI:
             for i in self.LstNew:
                 self.LstNew2Sub = []
                 for j in i:
+                    print('j =', j)
                     index = StringVar()
-                    index = str(j)
+                    index.set(j)
                     self.LstNew2Sub.append(index)
                 self.LstNew2.append(self.LstNew2Sub)
 
             print('self.LstNew2 =', self.LstNew2)
 
-            self.cards = self.LstNew
+            self.cards = self.LstNew2
+            print('self.cards =', self.cards)
 
             #   print('self.LstCards =', self.LstCards)
 
@@ -473,8 +496,41 @@ class GUI:
 
         # Widget 2
 
+
+        # Variable to determine the number of rows in the table. Can be changed with buttons
+        # VarTableRowSpan = (number of cards * 2) + 3
+        # Num cards = 9
+        self.VarTableRowSpan = IntVar()
+        self.VarTableRowSpan = (17*2)+3
+
+
+        # Creating the scroll bar through a frame in a canvas in a frame
+
+        def CanvasConfig(event):
+            self.canvas.configure(scrollregion=self.canvas.bbox("all"), width=490, height=600)
+
+        self.FmeSbTop = Frame(self.FmePage2CreateSet)
+        self.FmeSbTop.grid(row=3, column=1, rowspan=self.VarTableRowSpan, columnspan=3)
+
+        self.canvas = Canvas(self.FmeSbTop)
+
+        self.FmeSbSub = Frame(self.canvas, width=100, height=600, bg='red')
+
+        self.ScrollBar = Scrollbar(self.FmeSbTop, orient='vertical', command=self.canvas.yview)
+
+        self.canvas.configure(yscrollcommand=self.ScrollBar.set)
+
+        self.ScrollBar.pack(side='right', fill='y')
+
+        self.canvas.pack(side='left')
+
+        self.canvas.create_window((0, 0), window=self.FmeSbSub, anchor='nw')
+
+        self.FmeSbSub.bind('<Configure>', CanvasConfig)
+
         # Frame to contain table
-        self.FmeTableCreate = Frame(self.FmePage2CreateSet)
+        self.FmeTableCreate = Frame(self.FmeSbSub)
+        self.FmeTableCreate.grid(row=3, column=1, rowspan=self.VarTableRowSpan, columnspan=3)
 
 
         # Header for 'Term' Column
@@ -494,13 +550,6 @@ class GUI:
 
 
         # Setting Entry Fields
-
-
-        # Variable to determine the number of rows in the table. Can be changed with buttons
-        # VarTableRowSpan = (number of cards * 2) + 3
-        # Num cards = 9
-        self.VarTableRowSpan = IntVar()
-        self.VarTableRowSpan = (6*2)+3
 
         self.LstCardsCreate = []
 
@@ -565,9 +614,6 @@ class GUI:
                     self.LblBorder.grid(row=i, column=j)
                     self.border.append(self.LblBorder)
 
-        self.FmeTableCreate.grid(row=3, column=1, rowspan=self.VarTableRowSpan, columnspan=3)
-
-
         # Widget 3
         self.BtnSave = Button(self.FmePage2CreateSet, text='Save Set', width=16, command=self.CreateSave)
         self.BtnSave.config(font=('Times', 16))
@@ -594,7 +640,7 @@ class GUI:
         self.countBlank = 0
         while self.countBlank < 7:
             for i in blanks[self.countBlank]:
-                self.LblBlank = Label(self.FmePage2CreateSet, height=1, width=8, bg='green', text='abc')
+                self.LblBlank = Label(self.FmePage2CreateSet, height=1, width=8)
                 self.LblBlank.config(font=('Arial', 10))
                 # self.LblBlank = Label(self.FmePage1ViewOverview, height=1, width=8)
                 self.LblBlank.grid(row=i, column=self.countBlank)
@@ -804,11 +850,6 @@ class GUI:
         # Will create a label to store all of the text and the text will be a variable that
         # changed is a button is pressed. By default the label will be blank but have space for text in window by having
         # hard coded width and height.
-
-
-
-
-
 
 root = Tk()
 root.geometry('1000x800')
