@@ -26,232 +26,8 @@ class GUI:
 
 
             # Widget 2
-
-            # Creating List
-
-            self.count = 0
             self.cards = []
-            while self.count < 24:
-                self.VarCardT = StringVar()
-                self.VarCardT = ('term' + str(self.count))
-
-                self.VarCardD = StringVar()
-                self.VarCardD = ('def' + str(self.count))
-
-                self.VarCardI = StringVar()
-                self.VarCardI = ('IMG' + str(self.count))
-
-                self.cards.append([self.VarCardT, self.VarCardD, self.VarCardI])
-                self.count += 1
-
-            # Defining a temporary variable to store the number of card for determining table size
-            self.noCards = (len(self.cards) * 2) + 3
-
-
-            # Creating the scroll bar through a frame in a canvas in a frame
-
-            def CanvasConfig(event):
-                self.canvas.configure(scrollregion=self.canvas.bbox("all"), width=490, height=600)
-            self.FmeSbTop = Frame(self.FmePage1ViewOverview)
-            self.FmeSbTop.grid(row=2, column=1, rowspan=(len(self.cards) * 3) + (len(self.cards)) + 3, columnspan=3)
-            self.canvas = Canvas(self.FmeSbTop)
-            self.FmeSbSub = Frame(self.canvas, width=530, height=600)
-            self.ScrollBar = Scrollbar(self.FmeSbTop, orient='vertical', command=self.canvas.yview)
-            self.canvas.configure(yscrollcommand=self.ScrollBar.set)
-            self.ScrollBar.pack(side='right', fill='y')
-            self.canvas.pack(side='left')
-            self.canvas.create_window((0,0), window=self.FmeSbSub,anchor='nw')
-            self.FmeSbSub.bind('<Configure>', CanvasConfig)
-
-
-
-            # Creating the View Frame
-            self.FmeTableView = Frame(self.FmeSbSub)
-            # Grid line is below as it uses a variable to determine rowspan
-
-            # Header for 'Term' Column
-            self.LblTermHeader = Label(self.FmeTableView, text='Term', width=12, height=1)
-            self.LblTermHeader.config(font=('Times', 18, 'underline'))
-            self.LblTermHeader.grid(row=1, column=1)
-
-            # Header for 'Definition' Column
-            self.LblDefHeader = Label(self.FmeTableView, text='Definition', width=22, height=1)
-            self.LblDefHeader.config(font=('Times', 18, 'underline'))
-            self.LblDefHeader.grid(row=1, column=3)
-
-            # Header for 'Image' Column
-            self.LblImgHeader = Label(self.FmeTableView, text='Image', width=12, height=1)
-            self.LblImgHeader.config(font=('Times', 18, 'underline'))
-            self.LblImgHeader.grid(row=1, column=5)
-
-            # Creating a list of dummy data to appear in form:
-            # [['term1', 'def1', 'img1'], ['term2', 'def2', 'img2'], ['term3', 'def3', 'img3'],
-            #              ['term4', 'def5', 'img6'], ['term7', 'def7', 'img7'], ['term8', 'def8', 'img8']
-            #         , ['term9', 'def9', 'img9'], ['term10', 'def10', 'img10'], ['term11', 'def11', 'img11']]
-
-
-            # Placing the table in the grid so it appears by default
-            self.FmeTableView.grid(row=2, column=1, rowspan=(len(self.cards) * 3) + (len(self.cards)) + 3, columnspan=3)
-
-
-            # Setting the content for the 'Term' Column
-            self.count = 0
-            for i in range(2, self.noCards):
-                if (i % 2) == 1:
-                    self.VarCurrentTerm = StringVar()
-                    self.VarCurrentTerm.set(self.cards[self.count][0])
-                    self.LblTerm = Label(self.FmeTableView, textvariable=self.VarCurrentTerm, anchor='w', width=12, height=3)
-                    self.LblTerm.config(font=('Times', 14))
-                    self.LblTerm.grid(row=i, column=1)
-                    self.count += 1
-
-            # Setting the content for the 'Definition' Column
-            self.count = 0
-            for i in range(2, self.noCards):
-                if (i % 2) == 1:
-                    self.VarCurrentDef = StringVar()
-                    self.VarCurrentDef.set(self.cards[self.count][1])
-                    self.LblDef = Label(self.FmeTableView, textvariable=self.VarCurrentDef, anchor='w', width=22, height=3)
-                    self.LblDef.config(font=('Times', 14))
-                    self.LblDef.grid(row=i, column=3)
-                    self.count += 1
-
-            # Setting the content for the 'Image' Column
-            self.count = 0
-            for i in range(2, self.noCards):
-                if (i % 2) == 1:
-                    self.VarCurrentImg = StringVar()
-                    self.VarCurrentImg.set(self.cards[self.count][2])
-                    self.LblImg = Label(self.FmeTableView, textvariable=self.VarCurrentImg, anchor='w', width=12, height=3)
-                    self.LblImg.config(font=('Times', 14))
-                    self.LblImg.grid(row=i, column=5)
-                    self.count += 1
-
-            # Setting border around table
-            self.border = []
-            for i in range(0, self.noCards):
-                for j in range(0,7):
-                    # Even row and column = 0, 2, 4, 6 (even)
-                    if (i % 2) == 0 and (j % 2) == 0:
-                        self.LblBorder = Label(self.FmeTableView, width=1, height=1, bg='grey')
-                        self.LblBorder.grid(row=i,column=j)
-                        self.border.append(self.LblBorder)
-                    # Even row and column = 1 (term)
-                    elif (i % 2) == 0 and j == 1:
-                        self.LblBorder = Label(self.FmeTableView, width=12, height=1, bg='grey')
-                        self.LblBorder.grid(row=i, column=j)
-                        self.border.append(self.LblBorder)
-                    # Even row and column = 3 (def)
-                    elif (i % 2) == 0 and j == 3:
-                        self.LblBorder = Label(self.FmeTableView, width=22, height=1, bg='grey')
-                        self.LblBorder.grid(row=i, column=j)
-                        self.border.append(self.LblBorder)
-                    # Even row and column = 1 (img)
-                    elif (i % 2) == 0 and j == 5:
-                        self.LblBorder = Label(self.FmeTableView, width=12, height=1, bg='grey')
-                        self.LblBorder.grid(row=i, column=j)
-                        self.border.append(self.LblBorder)
-                    elif (i % 2) == 1 and (j % 2) == 0 and i != 1:
-                        self.LblBorder = Label(self.FmeTableView, width=1, height=3, bg='grey')
-                        self.LblBorder.grid(row=i, column=j)
-                        self.border.append(self.LblBorder)
-                    elif (i % 2) == 1 and (j % 2) == 0:
-                        self.LblBorder = Label(self.FmeTableView, width=1, height=2, bg='grey')
-                        self.LblBorder.grid(row=i, column=j)
-                        self.border.append(self.LblBorder)
-
-            # Edit Table
-
-            # Creating the frame
-            self.FmeTableEdit = Frame(self.FmeSbSub)
-
-            # Header for 'Term' Column
-            self.LblTermHeader = Label(self.FmeTableEdit, text='Term', width=12, height=1)
-            self.LblTermHeader.config(font=('Times', 18, 'underline'))
-            self.LblTermHeader.grid(row=1, column=1)
-
-            # Header for 'Definition' Column
-            self.LblDefHeader = Label(self.FmeTableEdit, text='Definition', width=22, height=1)
-            self.LblDefHeader.config(font=('Times', 18, 'underline'))
-            self.LblDefHeader.grid(row=1, column=3)
-
-            # Header for 'Image' Column
-            self.LblImgHeader = Label(self.FmeTableEdit, text='Image', width=12, height=1)
-            self.LblImgHeader.config(font=('Times', 18, 'underline'))
-            self.LblImgHeader.grid(row=1, column=5)
-
-            # Defining a temporary variable to store the number of card for determining table size
-            self.noCards = (len(self.cards) * 2) + 3
-
-
-            # Creating the entry fields
-
-            self.count = 0
-            self.LstEditCards = []
-
-            for i in range(2, self.noCards):
-                self.LstEditCardsSub = []
-
-                if (i % 2) == 1:
-                    # Setting the content for the 'Term' Column
-                    self.VarCurrentTerm = StringVar()
-                    self.VarCurrentTerm.set(self.cards[self.count][0])
-                    self.EntTerm = Entry(self.FmeTableEdit, textvariable=self.VarCurrentTerm, width=12)
-                    self.LstEditCardsSub.append(self.VarCurrentTerm)
-                    self.EntTerm.config(font=('Times', 14))
-                    self.EntTerm.grid(row=i, column=1)
-
-                    # Setting the content for the 'Definition' Column
-                    self.VarCurrentDef = StringVar()
-                    self.VarCurrentDef.set(self.cards[self.count][1])
-                    self.EntDef = Entry(self.FmeTableEdit, textvariable=self.VarCurrentDef, width=22)
-                    self.LstEditCardsSub.append(self.VarCurrentDef)
-                    self.EntDef.config(font=('Times', 14))
-                    self.EntDef.grid(row=i, column=3)
-
-                    # Setting the content for the 'Image' Column
-                    self.VarCurrentImg = StringVar()
-                    self.VarCurrentImg.set(self.cards[self.count][2])
-                    self.EntImg = Entry(self.FmeTableEdit, textvariable=self.VarCurrentImg, width=12)
-                    self.LstEditCardsSub.append(self.VarCurrentImg)
-                    self.EntImg.config(font=('Times', 14))
-                    self.EntImg.grid(row=i, column=5)
-
-                    self.count += 1
-                    self.LstEditCards.append(self.LstEditCardsSub)
-
-            # Setting border around table
-            self.border = []
-            for i in range(0, self.noCards):
-                for j in range(0, 7):
-                    # Even row and column = 0, 2, 4, 6 (even)
-                    if (i % 2) == 0 and (j % 2) == 0:
-                        self.LblBorder = Label(self.FmeTableEdit, width=1, height=1, bg='grey')
-                        self.LblBorder.grid(row=i, column=j)
-                        self.border.append(self.LblBorder)
-                    # Even row and column = 1 (term)
-                    elif (i % 2) == 0 and j == 1:
-                        self.LblBorder = Label(self.FmeTableEdit, width=12, height=1, bg='grey')
-                        self.LblBorder.grid(row=i, column=j)
-                        self.border.append(self.LblBorder)
-                    # Even row and column = 3 (def)
-                    elif (i % 2) == 0 and j == 3:
-                        self.LblBorder = Label(self.FmeTableEdit, width=22, height=1, bg='grey')
-                        self.LblBorder.grid(row=i, column=j)
-                        self.border.append(self.LblBorder)
-                    # Even row and column = 1 (img)
-                    elif (i % 2) == 0 and j == 5:
-                        self.LblBorder = Label(self.FmeTableEdit, width=12, height=1, bg='grey')
-                        self.LblBorder.grid(row=i, column=j)
-                        self.border.append(self.LblBorder)
-                    elif (i % 2) == 1 and (j % 2) == 0 and i != 1:
-                        self.LblBorder = Label(self.FmeTableEdit, width=1, height=3, bg='grey')
-                        self.LblBorder.grid(row=i, column=j)
-                        self.border.append(self.LblBorder)
-                    elif (i % 2) == 1 and (j % 2) == 0:
-                        self.LblBorder = Label(self.FmeTableEdit, width=1, height=2, bg='grey')
-                        self.LblBorder.grid(row=i, column=j)
-                        self.border.append(self.LblBorder)
+            self.ViewOverviewTable()
 
 
             # Widget 3
@@ -288,7 +64,7 @@ class GUI:
 
             # Creating the Frame
             self.FmeOptions = Frame(self.FmePage1ViewOverview)
-            self.FmeOptions.grid(row=4, column=5, columnspan=3, rowspan=5)
+            self.FmeOptions.grid(row=4, column=5, columnspan=3, rowspan=7)
 
             # Default Side
 
@@ -364,22 +140,22 @@ class GUI:
             # Widget 7
             self.BtnView = Button(self.FmePage1ViewOverview, text='View Set', width=24)
             self.BtnView.config(font=('Times', 16))
-            self.BtnView.grid(row=9, column=5, rowspan=1, columnspan=3)
+            self.BtnView.grid(row=11, column=5, rowspan=1, columnspan=3)
 
             # Widget 8
             self.BtnDelete = Button(self.FmePage1ViewOverview, text='Delete Set')
             self.BtnView.config(font=('Times', 16))
-            self.BtnDelete.grid(row=11, column=5, rowspan=1)
+            self.BtnDelete.grid(row=13, column=5, rowspan=1)
 
             # Widget 9
             self.BtnHelp = Button(self.FmePage1ViewOverview, text='Help', width=8, command=self.HelpPage)
             self.BtnHelp.config(font=('Times', 16))
-            self.BtnHelp.grid(row=11, column=7, rowspan=1)
+            self.BtnHelp.grid(row=13, column=7, rowspan=1)
 
             # Blank Spaces
 
             blanks = [[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], [1], [1], [1], [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
-             [1, 10], [1, 11], [1, 10], [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]]
+             [1, 12], [1, 12, 13], [1, 12], [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]]
             self.countBlank = 0
             while self.countBlank < 9:
                 for i in blanks[self.countBlank]:
@@ -392,6 +168,231 @@ class GUI:
         # Placing The main Page on the grid as default
         self.FmePage1ViewOverview.grid(column=0, row=0, columnspan=3)
 
+    # Function to create the table
+    def ViewOverviewTable(self):
+
+        # Creating List
+        self.count = 0
+        if len(self.cards) < 1:
+            while self.count < 24:
+                self.VarCardT = StringVar()
+                self.VarCardT.set(('term' + str(self.count)))
+
+                self.VarCardD = StringVar()
+                self.VarCardD.set(('def' + str(self.count)))
+
+                self.VarCardI = StringVar()
+                self.VarCardI.set(('IMG' + str(self.count)))
+
+                self.cards.append([self.VarCardT, self.VarCardD, self.VarCardI])
+                self.count += 1
+
+        # Defining a temporary variable to store the number of card for determining table size
+        self.noCards = (len(self.cards) * 2) + 3
+
+        # Creating the scroll bar through a frame in a canvas in a frame
+        def CanvasConfig(event):
+            self.canvas.configure(scrollregion=self.canvas.bbox("all"), width=490, height=600)
+
+        self.FmeSbTop = Frame(self.FmePage1ViewOverview)
+        self.FmeSbTop.grid(row=2, column=1, rowspan=(len(self.cards) * 3) + (len(self.cards)) + 3, columnspan=3)
+        self.canvas = Canvas(self.FmeSbTop)
+        self.FmeSbSub = Frame(self.canvas, width=530, height=600)
+        self.ScrollBar = Scrollbar(self.FmeSbTop, orient='vertical', command=self.canvas.yview)
+        self.canvas.configure(yscrollcommand=self.ScrollBar.set)
+        self.ScrollBar.pack(side='right', fill='y')
+        self.canvas.pack(side='left')
+        self.canvas.create_window((0, 0), window=self.FmeSbSub, anchor='nw')
+        self.FmeSbSub.bind('<Configure>', CanvasConfig)
+
+        # Creating the View Frame
+        self.FmeTableView = Frame(self.FmeSbSub)
+        # Grid line is below as it uses a variable to determine rowspan
+
+        # Header for 'Term' Column
+        self.LblTermHeader = Label(self.FmeTableView, text='Term', width=12, height=1)
+        self.LblTermHeader.config(font=('Times', 18, 'underline'))
+        self.LblTermHeader.grid(row=1, column=1)
+
+        # Header for 'Definition' Column
+        self.LblDefHeader = Label(self.FmeTableView, text='Definition', width=22, height=1)
+        self.LblDefHeader.config(font=('Times', 18, 'underline'))
+        self.LblDefHeader.grid(row=1, column=3)
+
+        # Header for 'Image' Column
+        self.LblImgHeader = Label(self.FmeTableView, text='Image Directory', width=12, height=1)
+        self.LblImgHeader.config(font=('Times', 17, 'underline'))
+        self.LblImgHeader.grid(row=1, column=5)
+
+        # Creating a list of dummy data to appear in form:
+        # [['term1', 'def1', 'img1'], ['term2', 'def2', 'img2'], ['term3', 'def3', 'img3'],
+        #              ['term4', 'def5', 'img6'], ['term7', 'def7', 'img7'], ['term8', 'def8', 'img8']
+        #         , ['term9', 'def9', 'img9'], ['term10', 'def10', 'img10'], ['term11', 'def11', 'img11']]
+
+        # Placing the table in the grid so it appears by default
+        self.FmeTableView.grid(row=2, column=1, rowspan=(len(self.cards) * 3) + (len(self.cards)) + 3, columnspan=3)
+
+        # Setting the content for the 'Term' Column
+        self.count = 0
+        for i in range(2, self.noCards):
+            if (i % 2) == 1:
+                self.VarCurrentTerm = StringVar()
+                self.VarCurrentTerm.set(self.cards[self.count][0].get())
+                self.LblTerm = Label(self.FmeTableView, textvariable=self.VarCurrentTerm, anchor='w', width=12,
+                                     height=3)
+                self.LblTerm.config(font=('Times', 14))
+                self.LblTerm.grid(row=i, column=1)
+                self.count += 1
+
+        # Setting the content for the 'Definition' Column
+        self.count = 0
+        for i in range(2, self.noCards):
+            if (i % 2) == 1:
+                self.VarCurrentDef = StringVar()
+                self.VarCurrentDef.set(self.cards[self.count][1].get())
+                self.LblDef = Label(self.FmeTableView, textvariable=self.VarCurrentDef, anchor='w', width=22,
+                                    height=3)
+                self.LblDef.config(font=('Times', 14))
+                self.LblDef.grid(row=i, column=3)
+                self.count += 1
+
+        # Setting the content for the 'Image' Column
+        self.count = 0
+        for i in range(2, self.noCards):
+            if (i % 2) == 1:
+                self.VarCurrentImg = StringVar()
+                self.VarCurrentImg.set(self.cards[self.count][2].get())
+                self.LblImg = Label(self.FmeTableView, textvariable=self.VarCurrentImg, anchor='w', width=12,
+                                    height=3)
+                self.LblImg.config(font=('Times', 14))
+                self.LblImg.grid(row=i, column=5)
+                self.count += 1
+
+        # Setting border around table
+        self.border = []
+        for i in range(0, self.noCards):
+            for j in range(0, 7):
+                # Even row and column = 0, 2, 4, 6 (even)
+                if (i % 2) == 0 and (j % 2) == 0:
+                    self.LblBorder = Label(self.FmeTableView, width=1, height=1, bg='grey')
+                    self.LblBorder.grid(row=i, column=j)
+                    self.border.append(self.LblBorder)
+                # Even row and column = 1 (term)
+                elif (i % 2) == 0 and j == 1:
+                    self.LblBorder = Label(self.FmeTableView, width=12, height=1, bg='grey')
+                    self.LblBorder.grid(row=i, column=j)
+                    self.border.append(self.LblBorder)
+                # Even row and column = 3 (def)
+                elif (i % 2) == 0 and j == 3:
+                    self.LblBorder = Label(self.FmeTableView, width=22, height=1, bg='grey')
+                    self.LblBorder.grid(row=i, column=j)
+                    self.border.append(self.LblBorder)
+                # Even row and column = 1 (img)
+                elif (i % 2) == 0 and j == 5:
+                    self.LblBorder = Label(self.FmeTableView, width=12, height=1, bg='grey')
+                    self.LblBorder.grid(row=i, column=j)
+                    self.border.append(self.LblBorder)
+                elif (i % 2) == 1 and (j % 2) == 0 and i != 1:
+                    self.LblBorder = Label(self.FmeTableView, width=1, height=3, bg='grey')
+                    self.LblBorder.grid(row=i, column=j)
+                    self.border.append(self.LblBorder)
+                elif (i % 2) == 1 and (j % 2) == 0:
+                    self.LblBorder = Label(self.FmeTableView, width=1, height=2, bg='grey')
+                    self.LblBorder.grid(row=i, column=j)
+                    self.border.append(self.LblBorder)
+
+        # Edit Table
+
+        # Creating the frame
+        self.FmeTableEdit = Frame(self.FmeSbSub)
+
+        # Header for 'Term' Column
+        self.LblTermHeader = Label(self.FmeTableEdit, text='Term', width=12, height=1)
+        self.LblTermHeader.config(font=('Times', 18, 'underline'))
+        self.LblTermHeader.grid(row=1, column=1)
+
+        # Header for 'Definition' Column
+        self.LblDefHeader = Label(self.FmeTableEdit, text='Definition', width=22, height=1)
+        self.LblDefHeader.config(font=('Times', 18, 'underline'))
+        self.LblDefHeader.grid(row=1, column=3)
+
+        # Header for 'Image' Column
+        self.LblImgHeader = Label(self.FmeTableEdit, text='Image', width=12, height=1)
+        self.LblImgHeader.config(font=('Times', 18, 'underline'))
+        self.LblImgHeader.grid(row=1, column=5)
+
+        # Defining a temporary variable to store the number of card for determining table size
+        self.noCards = (len(self.cards) * 2) + 3
+
+        # Creating the entry fields
+
+        self.count = 0
+        self.LstEditCards = []
+
+        for i in range(2, self.noCards):
+            self.LstEditCardsSub = []
+
+            if (i % 2) == 1:
+                # Setting the content for the 'Term' Column
+                self.VarCurrentTerm = StringVar()
+                self.VarCurrentTerm.set(self.cards[self.count][0].get())
+                self.EntTerm = Entry(self.FmeTableEdit, textvariable=self.VarCurrentTerm, width=12)
+                self.LstEditCardsSub.append(self.VarCurrentTerm)
+                self.EntTerm.config(font=('Times', 14))
+                self.EntTerm.grid(row=i, column=1)
+
+                # Setting the content for the 'Definition' Column
+                self.VarCurrentDef = StringVar()
+                self.VarCurrentDef.set(self.cards[self.count][1].get())
+                self.EntDef = Entry(self.FmeTableEdit, textvariable=self.VarCurrentDef, width=22)
+                self.LstEditCardsSub.append(self.VarCurrentDef)
+                self.EntDef.config(font=('Times', 14))
+                self.EntDef.grid(row=i, column=3)
+
+                # Setting the content for the 'Image' Column
+                self.VarCurrentImg = StringVar()
+                self.VarCurrentImg.set(self.cards[self.count][2].get())
+                self.EntImg = Entry(self.FmeTableEdit, textvariable=self.VarCurrentImg, width=12)
+                self.LstEditCardsSub.append(self.VarCurrentImg)
+                self.EntImg.config(font=('Times', 14))
+                self.EntImg.grid(row=i, column=5)
+
+                self.count += 1
+                self.LstEditCards.append(self.LstEditCardsSub)
+
+        # Setting border around table
+        self.border = []
+        for i in range(0, self.noCards):
+            for j in range(0, 7):
+                # Even row and column = 0, 2, 4, 6 (even)
+                if (i % 2) == 0 and (j % 2) == 0:
+                    self.LblBorder = Label(self.FmeTableEdit, width=1, height=1, bg='grey')
+                    self.LblBorder.grid(row=i, column=j)
+                    self.border.append(self.LblBorder)
+                # Even row and column = 1 (term)
+                elif (i % 2) == 0 and j == 1:
+                    self.LblBorder = Label(self.FmeTableEdit, width=12, height=1, bg='grey')
+                    self.LblBorder.grid(row=i, column=j)
+                    self.border.append(self.LblBorder)
+                # Even row and column = 3 (def)
+                elif (i % 2) == 0 and j == 3:
+                    self.LblBorder = Label(self.FmeTableEdit, width=22, height=1, bg='grey')
+                    self.LblBorder.grid(row=i, column=j)
+                    self.border.append(self.LblBorder)
+                # Even row and column = 1 (img)
+                elif (i % 2) == 0 and j == 5:
+                    self.LblBorder = Label(self.FmeTableEdit, width=12, height=1, bg='grey')
+                    self.LblBorder.grid(row=i, column=j)
+                    self.border.append(self.LblBorder)
+                elif (i % 2) == 1 and (j % 2) == 0 and i != 1:
+                    self.LblBorder = Label(self.FmeTableEdit, width=1, height=3, bg='grey')
+                    self.LblBorder.grid(row=i, column=j)
+                    self.border.append(self.LblBorder)
+                elif (i % 2) == 1 and (j % 2) == 0:
+                    self.LblBorder = Label(self.FmeTableEdit, width=1, height=2, bg='grey')
+                    self.LblBorder.grid(row=i, column=j)
+                    self.border.append(self.LblBorder)
+
     # Function to change the currently viewed set   CLI Merge
     def ViewOverviewSelect(self):
         print('Select Clicked')
@@ -403,7 +404,6 @@ class GUI:
     #                                               WIP
     def ViewOverviewEditSaveBtn(self):
         #     # WIP changes are not saved
-        print('EditSaveBtn Function Ran')
         status = self.VarEditSaveBtnBool.get()
         # If in view mode change to edit mode and change text
         if status == 0:
@@ -429,15 +429,7 @@ class GUI:
                         self.LstNewSub.append(x)
                     else:
                         messagebox.showinfo('Saving', 'Changes could not be saved as there was a blank space.')
-                        # Removes the edit table
-                        self.FmeTableEdit.grid_remove()
-
-                        # Code to place the view version of the table in the grid
-                        self.FmeTableView.grid(row=2, column=1, rowspan=(len(self.cards) * 3) + (len(self.cards)) + 3,
-                                               columnspan=3)
-
-                        self.VarEditSaveBtnText.set('Edit Set')
-                        self.VarEditSaveBtnBool.set(status)
+                        # Aborts the function
                         return
                 self.LstNew.append(self.LstNewSub)
 
@@ -446,21 +438,17 @@ class GUI:
             for i in self.LstNew:
                 self.LstNew2Sub = []
                 for j in i:
-                    print('j =', j)
                     index = StringVar()
                     index.set(j)
                     self.LstNew2Sub.append(index)
                 self.LstNew2.append(self.LstNew2Sub)
 
-            print('self.LstNew2 =', self.LstNew2)
-
             self.cards = self.LstNew2
-            print('self.cards =', self.cards)
-
-            #   print('self.LstCards =', self.LstCards)
 
             # Removes the edit table
             self.FmeTableEdit.grid_remove()
+
+            self.ViewOverviewTable()
 
             # Code to place the view version of the table in the grid
             self.FmeTableView.grid(row=2, column=1, rowspan=(len(self.cards) * 3) + (len(self.cards)) + 3, columnspan=3)
@@ -485,47 +473,89 @@ class GUI:
         self.EntName.grid(row=0,column=0,rowspan=2,columnspan=4)
 
         # Widget 4:     Add row to bottom of table
-        self.BtnAddRow = Button(self.FmePage2CreateSet, text='Add Row', width=16, command=lambda *args: self.CreateAddRow(self.VarTableRowSpan))
+        self.BtnAddRow = Button(self.FmePage2CreateSet, text='Add Row', width=16, command=lambda *args: self.CreateChangeRow(self.VarTableRowSpan, 0))
         self.BtnAddRow.config(font=('Times', 16))
         self.BtnAddRow.grid(row=4, column=5, rowspan=1, columnspan=1)
 
-        # Widget 5:     Remove row from bottom of table
-        self.BtnRemoveRow = Button(self.FmePage2CreateSet, text='Remove Row', width=16, command=lambda *args: self.CreateRemoveRow(self.VarTableRowSpan))
+        # Widget 5:     Remove row from bottom of tabxle
+        self.BtnRemoveRow = Button(self.FmePage2CreateSet, text='Remove Row', width=16, command=lambda *args: self.CreateChangeRow(self.VarTableRowSpan, 1))
         self.BtnRemoveRow.config(font=('Times', 16))
         self.BtnRemoveRow.grid(row=6, column=5, rowspan=1, columnspan=1)
 
         # Widget 2
-
-
         # Variable to determine the number of rows in the table. Can be changed with buttons
         # VarTableRowSpan = (number of cards * 2) + 3
         # Num cards = 9
         self.VarTableRowSpan = IntVar()
-        self.VarTableRowSpan = (17*2)+3
+        self.VarTableRowSpan = (17 * 2) + 3
+        self.LstCardsCreate = []
+        self.CreateTable()
 
+        # Widget 3
+        self.BtnSave = Button(self.FmePage2CreateSet, text='Save Set', width=16, command=self.CreateSave)
+        self.BtnSave.config(font=('Times', 16))
+        self.BtnSave.grid(row=1, column=5, rowspan=1, columnspan=1)
+
+        # Widget 5
+        self.BtnDelete = Button(self.FmePage2CreateSet, text='Delete Set', width=16, command=self.CreateDelete)
+        self.BtnDelete.config(font=('Times', 16))
+        self.BtnDelete.grid(row=8, column=5, rowspan=1, columnspan=1)
+
+        # Widget 6
+        self.BtnImport = Button(self.FmePage2CreateSet, text='Import Set', width=16, command=self.CreateImport)
+        self.BtnImport.config(font=('Times', 16))
+        self.BtnImport.grid(row=10, column=5, rowspan=1, columnspan=1)
+
+        # Widget 7
+        self.BtnHelp = Button(self.FmePage2CreateSet, text='Help', width=16, command=self.HelpPage)
+        self.BtnHelp.config(font=('Times', 16))
+        self.BtnHelp.grid(row=12, column=5, rowspan=1, columnspan=1)
+
+        # Blank Spaces
+
+        blanks = [[2,3,4,5,6,7,8,9], [2], [2], [2], [0,1,2,3,4,5,6,7,8,9,11], [0,3,5,7,9,11], [0,3,5,7,9,11]]
+        self.countBlank = 0
+        while self.countBlank < 7:
+            for i in blanks[self.countBlank]:
+                self.LblBlank = Label(self.FmePage2CreateSet, height=1, width=8)
+                self.LblBlank.config(font=('Arial', 10))
+                # self.LblBlank = Label(self.FmePage1ViewOverview, height=1, width=8)
+                self.LblBlank.grid(row=i, column=self.countBlank)
+            self.countBlank += 1
+
+        self.FmePage2CreateSet.grid(row=0,column=0)
+
+    # Function to create the table
+    def CreateTable(self):
+
+        # Creating List
+        self.count = 0
+        if len(self.LstCardsCreate) < 1:
+            while self.count < 24:
+                self.VarCardT = StringVar()
+                self.VarCardT.set(('Enter Term ' + str(self.count)))
+
+                self.VarCardD = StringVar()
+                self.VarCardD.set(('Enter Definition ' + str(self.count)))
+
+                self.VarCardI = StringVar()
+                self.VarCardI.set(('Enter Image Directory ' + str(self.count)))
+
+                self.LstCardsCreate.append([self.VarCardT, self.VarCardD, self.VarCardI])
+                self.count += 1
 
         # Creating the scroll bar through a frame in a canvas in a frame
-
         def CanvasConfig(event):
             self.canvas.configure(scrollregion=self.canvas.bbox("all"), width=490, height=600)
-
         self.FmeSbTop = Frame(self.FmePage2CreateSet)
         self.FmeSbTop.grid(row=3, column=1, rowspan=self.VarTableRowSpan, columnspan=3)
-
         self.canvas = Canvas(self.FmeSbTop)
-
-        self.FmeSbSub = Frame(self.canvas, width=100, height=600, bg='red')
-
+        self.FmeSbSub = Frame(self.canvas, width=100, height=600)
         self.ScrollBar = Scrollbar(self.FmeSbTop, orient='vertical', command=self.canvas.yview)
-
         self.canvas.configure(yscrollcommand=self.ScrollBar.set)
-
         self.ScrollBar.pack(side='right', fill='y')
-
         self.canvas.pack(side='left')
-
         self.canvas.create_window((0, 0), window=self.FmeSbSub, anchor='nw')
-
         self.FmeSbSub.bind('<Configure>', CanvasConfig)
 
         # Frame to contain table
@@ -544,35 +574,37 @@ class GUI:
         self.LblDefHeader.grid(row=1, column=3)
 
         # Header for 'Image' Column
-        self.LblImgHeader = Label(self.FmeTableCreate, text='Image', width=12, height=1)
-        self.LblImgHeader.config(font=('Times', 18, 'underline'))
+        self.LblImgHeader = Label(self.FmeTableCreate, text='Image Directory', width=12, height=1)
+        self.LblImgHeader.config(font=('Times', 17, 'underline'))
         self.LblImgHeader.grid(row=1, column=5)
 
 
         # Setting Entry Fields
-
-        self.LstCardsCreate = []
 
         # Setting the content for the 'Term' Column
         self.count = 0
         for i in range(2, self.VarTableRowSpan):
             self.LstCardsSub =[]
             if (i % 2) == 1:
+                # Setting the content for the 'Term' Column
                 self.VarCurrentTerm = StringVar()
+                self.VarCurrentTerm.set(self.LstCardsCreate[self.count][0].get())
                 self.EntTerm = Entry(self.FmeTableCreate, textvariable=self.VarCurrentTerm, width=12)
                 self.LstCardsSub.append(self.VarCurrentTerm)
                 self.EntTerm.config(font=('Times', 16))
                 self.EntTerm.grid(row=i, column=1)
 
-        # Setting the content for the 'Definition' Column
+                # Setting the content for the 'Definition' Column
                 self.VarCurrentDef = StringVar()
+                self.VarCurrentDef.set(self.LstCardsCreate[self.count][1].get())
                 self.EntDef = Entry(self.FmeTableCreate, textvariable=self.VarCurrentDef, width=22)
                 self.LstCardsSub.append(self.VarCurrentDef)
                 self.EntDef.config(font=('Times', 16))
                 self.EntDef.grid(row=i, column=3)
 
-        # Setting the content for the 'Image' Column
+                # Setting the content for the 'Image' Column
                 self.VarCurrentImg = StringVar()
+                self.VarCurrentImg.set(self.LstCardsCreate[self.count][2].get())
                 self.EntImg = Entry(self.FmeTableCreate, textvariable=self.VarCurrentImg, width=12)
                 self.LstCardsSub.append(self.VarCurrentImg)
                 self.EntImg.config(font=('Times', 16))
@@ -614,40 +646,6 @@ class GUI:
                     self.LblBorder.grid(row=i, column=j)
                     self.border.append(self.LblBorder)
 
-        # Widget 3
-        self.BtnSave = Button(self.FmePage2CreateSet, text='Save Set', width=16, command=self.CreateSave)
-        self.BtnSave.config(font=('Times', 16))
-        self.BtnSave.grid(row=1, column=5, rowspan=1, columnspan=1)
-
-        # Widget 5
-        self.BtnDelete = Button(self.FmePage2CreateSet, text='Delete Set', width=16, command=self.CreateDelete)
-        self.BtnDelete.config(font=('Times', 16))
-        self.BtnDelete.grid(row=8, column=5, rowspan=1, columnspan=1)
-
-        # Widget 6
-        self.BtnImport = Button(self.FmePage2CreateSet, text='Import Set', width=16, command=self.CreateImport)
-        self.BtnImport.config(font=('Times', 16))
-        self.BtnImport.grid(row=10, column=5, rowspan=1, columnspan=1)
-
-        # Widget 7
-        self.BtnHelp = Button(self.FmePage2CreateSet, text='Help', width=16, command=self.HelpPage)
-        self.BtnHelp.config(font=('Times', 16))
-        self.BtnHelp.grid(row=12, column=5, rowspan=1, columnspan=1)
-
-        # Blank Spaces
-
-        blanks = [[2,3,4,5,6,7,8,9], [2], [2], [2], [0,1,2,3,4,5,6,7,8,9,11], [0,3,5,7,9,11], [0,3,5,7,9,11]]
-        self.countBlank = 0
-        while self.countBlank < 7:
-            for i in blanks[self.countBlank]:
-                self.LblBlank = Label(self.FmePage2CreateSet, height=1, width=8)
-                self.LblBlank.config(font=('Arial', 10))
-                # self.LblBlank = Label(self.FmePage1ViewOverview, height=1, width=8)
-                self.LblBlank.grid(row=i, column=self.countBlank)
-            self.countBlank += 1
-
-        self.FmePage2CreateSet.grid(row=0,column=0)
-
     # Function to save the set that has just been made and change the screen back to ViewOverview
     #                                               CLI MERGE
     def CreateSave(self):
@@ -669,24 +667,41 @@ class GUI:
             self.FmePage2CreateSet.grid_remove()
             self.ViewOverviewPage(self.master)
 
-    # Function to add another row to the table      WIP
-    def CreateAddRow(self, numRow):
+    # Function to change the amount of rows in the table      WIP
+    def CreateChangeRow(self, numRow, change):
+        print('Change Row Function Ran')
         # Does so by incrementing the variable by +2 (+2 because there needs to be a border row)
         # WIP can't get the change to carry through to Create function
-        print('AddRow Function Ran')
-        numRow += 2
-        numRow = int(numRow)
-        self.VarTableRowSpan = numRow
+        print('\nchange =', change)
+        # If the function ran from the 'Add Row' Button, increase the row variable
+        if change == 0:
+            numRow += 2
+        # If the function ran from the 'Remove Row' Button, decrease the row variable
+        elif change == 1:
+            numRow -= 2
 
-    # Function to remove a row from the table       WIP
-    def CreateRemoveRow(self, numRow):
-        # Does so by incrementing the variable by -2 (-2 because there needs to be a border row)
-        # WIP can't get the change to carry through to Create function
-        # Same Problem as CreateAddRow
-        print('RemoveRow Function Ran')
-        numRow -= 2
+        # Reading the table to rewrite it into the file
+        self.LstNew = []
+        for i in self.LstCardsCreate:
+            self.LstNewSub = []
+            for j in i:
+                x = j.get()
+                self.LstNewSub.append(x)
+            self.LstNew.append(self.LstNewSub)
+
+        self.LstNew2 = []
+        for i in self.LstNew:
+            self.LstNew2Sub = []
+            for j in i:
+                index = StringVar()
+                index.set(j)
+                self.LstNew2Sub.append(index)
+            self.LstNew2.append(self.LstNew2Sub)
+        self.cards = self.LstNew2
+
         numRow = int(numRow)
         self.VarTableRowSpan = numRow
+        self.CreateTable()
 
     # Function to delete the set being made         COMPLETE
     def CreateDelete(self):
