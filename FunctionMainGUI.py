@@ -1,15 +1,15 @@
 from tkinter import *
 from tkinter import messagebox
+from PIL import ImageTk, Image
 
 class GUI:
-    # Initialisation Function
+    # Initialisation Function                       INITIAL FUNCTION
     def __init__(self, master):
         self.master = master
         master.title('Flash Card')
 
         # Calling the ViewOverview page to appear by default
         self.ViewOverviewPage(self.master)
-
 
     # Function for the ViewOverview Page            PAGE FUNCTION
     def ViewOverviewPage(self, master):
@@ -138,7 +138,7 @@ class GUI:
             self.RbCardOrderRnd.grid(row=5,column=1)
 
             # Widget 7
-            self.BtnView = Button(self.FmePage1ViewOverview, text='View Set', width=24)
+            self.BtnView = Button(self.FmePage1ViewOverview, text='View Set', width=24, command=lambda *args: self.ViewPage(master))
             self.BtnView.config(font=('Times', 16))
             self.BtnView.grid(row=11, column=5, rowspan=1, columnspan=3)
 
@@ -168,7 +168,7 @@ class GUI:
         # Placing The main Page on the grid as default
         self.FmePage1ViewOverview.grid(column=0, row=0, columnspan=3)
 
-    # Function to create the table
+    # Function to create the table                  PAGE CHILD FUNCTION
     def ViewOverviewTable(self):
 
         # Creating List
@@ -401,7 +401,7 @@ class GUI:
         # Ready to merge with CLI
 
     # Function for the ViewOverview Page to change to table from label to entry
-    #                                               WIP
+    #                                               CLI Merge
     def ViewOverviewEditSaveBtn(self):
         #     # WIP changes are not saved
         status = self.VarEditSaveBtnBool.get()
@@ -512,7 +512,6 @@ class GUI:
         self.BtnHelp.grid(row=12, column=5, rowspan=1, columnspan=1)
 
         # Blank Spaces
-
         blanks = [[2,3,4,5,6,7,8,9], [2], [2], [2], [0,1,2,3,4,5,6,7,8,9,11], [0,3,5,7,9,11], [0,3,5,7,9,11]]
         self.countBlank = 0
         while self.countBlank < 7:
@@ -525,7 +524,7 @@ class GUI:
 
         self.FmePage2CreateSet.grid(row=0,column=0)
 
-    # Function to create the table
+    # Function to create the table                  PAGE CHILD FUNCTION
     def CreateTable(self):
 
         # Creating List
@@ -667,7 +666,7 @@ class GUI:
             self.FmePage2CreateSet.grid_remove()
             self.ViewOverviewPage(self.master)
 
-    # Function to change the amount of rows in the table      WIP
+    # Function to change the amount of rows in the table      COMPLETE
     def CreateChangeRow(self, numRow, change):
         print('Change Row Function Ran')
         # Does so by incrementing the variable by +2 (+2 because there needs to be a border row)
@@ -766,7 +765,172 @@ class GUI:
         def ImImport(self, directory):
             print('SUB FUNCTION')
 
-    # Function for the Help Page                    Text
+
+    # Function for the View Page                    PAGE FUNCTION
+    def ViewPage(self, master):
+        # Removing the frame containing ViewOverviewPage
+        self.FmePage1ViewOverview.grid_remove()
+
+        # Creating the frame to store the contents of Create Page grid line at bottom of function
+        self.FmePage3View = Frame(master)
+
+        # Widget 1
+        self.LblName = Label(self.FmePage3View, text='setName', width=23, bg='Orange')
+        self.LblName.config(font=('Arail', 32, 'bold underline'))
+        self.LblName.grid(row=0, column=0, rowspan=1, columnspan=5)
+
+        # Widget 2
+        self.FmeDisplay = Frame(self.FmePage3View)
+        self.FmeDisplay.grid(row=2, column=1, rowspan=9, columnspan=5)
+
+
+        # Can show text 8 lines high and 30 characters wide
+        self.VarCardShow = StringVar()
+        self.VarCardShow.set('ENTER TEXT HERE')
+        self.LblCard = Label(self.FmeDisplay, height=8, width=30, textvariable=self.VarCardShow)
+        self.LblCard.config(font=('Times', 32))
+        #self.LblCard.grid(row=1, column=1)
+
+        self.ImgDirectory = StringVar()
+        self.ImgDirectory.set('/Users/19ecornish/Desktop/Image.png')
+        # Opening the image file
+        self.ImgTemp = Image.open(self.ImgDirectory.get())
+        # Resizing the image
+        self.ImgTemp = self.ImgTemp.resize((367, 275), Image.ANTIALIAS)  # (width,height)
+        # Saving the image to a file in a format recognised by tkinter
+        self.ImgTemp.save('ImageTempFile.gif', 'gif')
+        # Opening the image file as a PhotoImage object
+        self.ImgObj = PhotoImage(file='ImageTempFile.gif')
+        # Placing the image object in a label
+        self.ImgLabel = Label(self.FmeDisplay, image=self.ImgObj)
+        # Setting the image method of the label to the image object
+        self.ImgLabel.image = self.ImgObj
+        # Placing the label on the grid
+        self.ImgLabel.grid(row=1, column=1)
+
+        # Border around content
+        self.LblBorder1 = Label(self.FmeDisplay, height=2, width=4, bg='grey90')
+        self.LblBorder1.config(font=('Times', 16))
+        self.LblBorder1.grid(row=0, column=0)
+        self.LblBorder2 = Label(self.FmeDisplay, height=2, width=60, bg='grey90')
+        self.LblBorder2.config(font=('Times', 16))
+        self.LblBorder2.grid(row=0, column=1)
+        self.LblBorder3 = Label(self.FmeDisplay, height=2, width=4, bg='grey90')
+        self.LblBorder3.config(font=('Times', 16))
+        self.LblBorder3.grid(row=0, column=2)
+        self.LblBorder4 = Label(self.FmeDisplay, height=16, width=4, bg='grey90')
+        self.LblBorder4.config(font=('Times', 16))
+        self.LblBorder4.grid(row=1, column=0)
+        self.LblBorder5 = Label(self.FmeDisplay, height=16, width=4, bg='grey90')
+        self.LblBorder5.config(font=('Times', 16))
+        self.LblBorder5.grid(row=1, column=2)
+        self.LblBorder6 = Label(self.FmeDisplay, height=2, width=4, bg='grey90')
+        self.LblBorder6.config(font=('Times', 16))
+        self.LblBorder6.grid(row=2, column=0)
+        self.LblBorder7 = Label(self.FmeDisplay, height=2, width=60, bg='grey90')
+        self.LblBorder7.config(font=('Times', 16))
+        self.LblBorder7.grid(row=2, column=1)
+        self.LblBorder8 = Label(self.FmeDisplay, height=2, width=4, bg='grey90')
+        self.LblBorder8.config(font=('Times', 16))
+        self.LblBorder8.grid(row=2, column=2)
+
+        # Widget 3
+        self.BtnBack = Button(self.FmePage3View, text='Back', width=24, command=self.ViewBack)
+        self.BtnBack.config(font=('Times', 16))
+        self.BtnBack.grid(row=0, column=5, rowspan=1, columnspan=3)
+
+        # Widget 4
+        self.LblProgressLabel = Label(self.FmePage3View, text='Progress:', width=12)
+        self.LblProgressLabel.config(font=('Times', 16))
+        self.LblProgressLabel.grid(row=2, column=7, rowspan=1, columnspan=1)
+
+        # Widget 5
+        self.VarProgress = StringVar()
+        self.VarProgress.set('99/99')
+        self.LblProgressResults = Label(self.FmePage3View, textvariable=self.VarProgress, width=12, anchor='e')
+        self.LblProgressResults.config(font=('Times', 16))
+        self.LblProgressResults.grid(row=3, column=7, rowspan=1, columnspan=1)
+
+        # Widget 6
+        self.VarStarUnstarText = StringVar()
+        self.VarStarUnstarText.set('Star')
+        self.BtnStarUnstar = Button(self.FmePage3View, textvariable=self.VarStarUnstarText, width=12, command=self.ViewStarUnstar)
+        self.BtnStarUnstar.config(font=('Times', 16))
+        self.BtnStarUnstar.grid(row=6, column=7, rowspan=1, columnspan=1)
+
+        # Widget 7
+        self.BtnHelp = Button(self.FmePage3View, text='Help', width=12, command=self.HelpPage)
+        self.BtnHelp.config(font=('Times', 16))
+        self.BtnHelp.grid(row=9, column=7, rowspan=1, columnspan=1)
+
+        # Widget 8
+        self.BtnPrevious = Button(self.FmePage3View, text='Previous', width=8, command=self.ViewPrevious)
+        self.BtnPrevious.config(font=('Times', 16))
+        self.BtnPrevious.grid(row=11, column=1, rowspan=1, columnspan=1)
+
+        # Widget 9
+        self.BtnTerm = Button(self.FmePage3View, text='Term', width=8, command=self.ViewTerm)
+        self.BtnTerm.config(font=('Times', 16))
+        self.BtnTerm.grid(row=11, column=2, rowspan=1, columnspan=1)
+
+        # Widget 10
+        self.BtnImage = Button(self.FmePage3View, text='Image', width=8, command=self.ViewImage)
+        self.BtnImage.config(font=('Times', 16))
+        self.BtnImage.grid(row=11, column=3, rowspan=1, columnspan=1)
+
+        # Widget 11
+        self.BtnDef = Button(self.FmePage3View, text='Definition', width=8, command=self.ViewDef)
+        self.BtnDef.config(font=('Times', 16))
+        self.BtnDef.grid(row=11, column=4, rowspan=1, columnspan=1)
+
+        # Widget 12
+        self.BtnNext = Button(self.FmePage3View, text='Next', width=8, command=self.ViewNext)
+        self.BtnNext.config(font=('Times', 16))
+        self.BtnNext.grid(row=11, column=5, rowspan=1, columnspan=1)
+
+        # Blank Spaces
+        blanks = [[1,2,3,4,5,6,7,8,9,10,11,12], [1,12], [1,12], [1,12], [1,12], [1,12], [1,2,3,4,5,6,7,8,9,10,11,12],
+                  [1,4,5,7,8,10,11,12], [0,1,2,3,4,5,6,7,8,9,10,11,12]]
+        self.countBlank = 0
+        while self.countBlank < 9:
+            for i in blanks[self.countBlank]:
+                self.LblBlank = Label(self.FmePage3View, height=1, width=8)#, bg='green', text='abc')
+                self.LblBlank.config(font=('Arial', 10))
+                self.LblBlank.grid(row=i, column=self.countBlank)
+            self.countBlank += 1
+
+        self.FmePage3View.grid()
+
+    # Function to go back to ViewOverview Page      COMPLETE
+    def ViewBack(self):
+        self.FmePage3View.grid_remove()
+        self.ViewOverviewPage(self.master)
+
+    # Function to Star/Unstar a card                WIP
+    def ViewStarUnstar(self):
+        print('ViewStarUnstar')
+
+    # Function to go to the previous card           WIP
+    def ViewPrevious(self):
+        print('ViewPrevious')
+
+    # Function to show the term                    WIP
+    def ViewTerm(self):
+        print('ViewTerm')
+
+    # Function to show the image                   WIP
+    def ViewImage(self):
+        print('ViewImage')
+
+    # Function to show the definition              WIP
+    def ViewDef(self):
+        print('ViewDefinition')
+
+    # Function to go to the next card           WIP
+    def ViewNext(self):
+        print('ViewNext')
+
+    # Function for the Help Page                    Needs Text
     def HelpPage(self):
         # Contains a sub function
         # Needs text which will be added last after final changed
@@ -859,14 +1023,11 @@ class GUI:
             elif input == 8:
                 text=('Button 8')
             self.VarHpText.set(text)
-
-
-
         # Will create a label to store all of the text and the text will be a variable that
         # changed is a button is pressed. By default the label will be blank but have space for text in window by having
         # hard coded width and height.
 
 root = Tk()
 root.geometry('1000x800')
-my_gui = GUI(root)
+GUI = GUI(root)
 root.mainloop()
