@@ -1,5 +1,4 @@
-
-# Function for creatig sets
+# Function for creating sets
 # listSetName is a list of lists that stores the name and file name for each set
 def CreateSet(listSetName):
     # Getting the name of the set and the name of the file from the user

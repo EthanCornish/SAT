@@ -2,7 +2,6 @@
 # importing the os library to delete files
 import os
 
-
 def DeleteSet(listSetName, setName, setFile):
     # Searching for the wanted set in listSetName.
     position = 0

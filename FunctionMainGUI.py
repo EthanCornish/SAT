@@ -1,7 +1,13 @@
+# Importing everything in the tkinter library
+# tkinter library is used in creating the gui
 from tkinter import *
+# Specifically importing the messagebox widget from tkinter. Could not call widget without specific import line
 from tkinter import messagebox
+# Importing Items from Photo Imaging Library to allow images to be shown in the program
 from PIL import ImageTk, Image
 
+
+# The Class that contains all of the GUI component
 class GUI:
     # Initialisation Function                       INITIAL FUNCTION
     def __init__(self, master):
@@ -789,24 +795,24 @@ class GUI:
         self.VarCardShow.set('ENTER TEXT HERE')
         self.LblCard = Label(self.FmeDisplay, height=8, width=30, textvariable=self.VarCardShow)
         self.LblCard.config(font=('Times', 32))
-        #self.LblCard.grid(row=1, column=1)
+        self.LblCard.grid(row=1, column=1)
 
-        self.ImgDirectory = StringVar()
-        self.ImgDirectory.set('/Users/19ecornish/Desktop/Image.png')
+      #  self.ImgDirectory = StringVar()
+       # self.ImgDirectory.set('/Users/19ecornish/Desktop#/ajax-loader.gif')
         # Opening the image file
-        self.ImgTemp = Image.open(self.ImgDirectory.get())
+      #  self.ImgTemp = Image.open(self.ImgDirectory.get())
         # Resizing the image
-        self.ImgTemp = self.ImgTemp.resize((367, 275), Image.ANTIALIAS)  # (width,height)
+      #  self.ImgTemp = self.ImgTemp.resize((367, 275), Image.ANTIALIAS)  # (width,height)
         # Saving the image to a file in a format recognised by tkinter
-        self.ImgTemp.save('ImageTempFile.gif', 'gif')
+      #  self.ImgTemp.save('ImageTempFile.gif', 'gif')
         # Opening the image file as a PhotoImage object
-        self.ImgObj = PhotoImage(file='ImageTempFile.gif')
+      #  self.ImgObj = PhotoImage(file='ImageTempFile.gif')
         # Placing the image object in a label
-        self.ImgLabel = Label(self.FmeDisplay, image=self.ImgObj)
+      #  self.ImgLabel = Label(self.FmeDisplay, image=self.ImgObj)
         # Setting the image method of the label to the image object
-        self.ImgLabel.image = self.ImgObj
+      #  self.ImgLabel.image = self.ImgObj
         # Placing the label on the grid
-        self.ImgLabel.grid(row=1, column=1)
+      #  self.ImgLabel.grid(row=1, column=1)
 
         # Border around content
         self.LblBorder1 = Label(self.FmeDisplay, height=2, width=4, bg='grey90')
@@ -894,7 +900,7 @@ class GUI:
         self.countBlank = 0
         while self.countBlank < 9:
             for i in blanks[self.countBlank]:
-                self.LblBlank = Label(self.FmePage3View, height=1, width=8)#, bg='green', text='abc')
+                self.LblBlank = Label(self.FmePage3View, height=1, width=8, bg='green', text='abc')
                 self.LblBlank.config(font=('Arial', 10))
                 self.LblBlank.grid(row=i, column=self.countBlank)
             self.countBlank += 1
@@ -1027,7 +1033,48 @@ class GUI:
         # changed is a button is pressed. By default the label will be blank but have space for text in window by having
         # hard coded width and height.
 
+# Code to create the window
 root = Tk()
 root.geometry('1000x800')
+
+# Code to create listSetName
+
+listSetName = []
+# Reading listSetName file to the list.
+# Each line in the file is a set
+# The first value is the setName, the second is the fileName
+# The try, except block prevents an error if it is the first time running the program and therefor there is no file
+try:
+    fileListSetName = open('fileListSetName.txt', 'r')
+    for line in fileListSetName:
+        line = line.strip('\n')
+        line = line.split(',')
+        listSetName.append(line)
+    fileListSetName.close()
+except FileNotFoundError:
+    listSetName = []
+
+# Setting the current/default set. Takes the last set on the listSetName list and records the setName and fileName
+currentSetName = listSetName[-1][0]
+currentSetFile = listSetName[-1][1]
+
+
+
+
+print('listSetName =', listSetName)
+print('currentSetName =', currentSetName)
+print('currentSetFile =', currentSetFile)
+
+# Calls the GUI
 GUI = GUI(root)
+# Runs the window
 root.mainloop()
+fileListSetName = open('fileListSetName.txt', 'w')
+for set in listSetName:
+    fileListSetName.write(set[0])
+    fileListSetName.write(',')
+    fileListSetName.write(set[1])
+    fileListSetName.write('\n')
+fileListSetName.close()
+
+print('SAVED')

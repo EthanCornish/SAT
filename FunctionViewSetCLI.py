@@ -18,6 +18,10 @@ def CardOrderRnd(currentCardNumber, listSet, shownCards):
         # Define variable and list to count what cards have been shown to prevent repeats.
         cycle = 0
         results = []
+        # Rewrite the part that checks if the item is present
+        # Place in a separate function above this
+        # Function that takes list and item and returns a True/False
+        # Test the function with a linear search then with a binary search
         while cycle < len(shownCards):
             # Records if the new card has been found before.
             if x == shownCards[cycle]:
@@ -35,7 +39,7 @@ def CardOrderRnd(currentCardNumber, listSet, shownCards):
                 break
             elif i == 'no':
                 run = False
-        # If everycard has been shown make x the number of cards then the main program
+        # If every card has been shown make x the number of cards then the main program
         # will catch it and exit ViewSetFunction
         if len(shownCards) == len(listSet[1]):
             x = len(listSet[1])

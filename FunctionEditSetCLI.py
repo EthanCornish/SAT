@@ -1,5 +1,6 @@
-
-
+# Function for editing sets
+# setName is the name of the set that is being edited
+# setFile is the name of the file the set is in
 def EditSet(setName, setFile):
     # Reading file and creating listSet
     # This may be put in a different function to be used by FunctionViewOverview and FunctionViewSet
