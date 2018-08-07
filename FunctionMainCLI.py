@@ -1,21 +1,21 @@
 # Importing the 'CreateSet' Function
-from FunctionCreateSetCLI import CreateSet
+from FunctionsCLI import CreateSet
 # Importing the 'EditSet' Function
-from FunctionEditSetCLI import EditSet
+from FunctionsCLI import EditSet
 # Importing the 'SelectSet' Function
-from FunctionSelectSetCLI import SelectSet
+from FunctionsCLI import SelectSet
 # Importing the 'ViewOverview' Function
-from FunctionViewOverviewCLI import ViewOverview
+from FunctionsCLI import ViewOverview
 # Importing the 'ViewSet' Function
-from FunctionViewSetCLI import ViewSet
+from FunctionsCLI import ViewSet
 # Importing the 'ImportSet' Function
-from FunctionImportSetCLI import ImportSet
+from FunctionsCLI import ImportSet
 # Importing the 'ExportSet' Function
 from FunctionExportSetCLI import ExportSet
 # Importing the 'Help' Function
 from FunctionHelpCLI import Help
 # Importing the 'DeleteSet' Function
-from FunctionDeleteSetCLI import DeleteSet
+from FunctionsCLI import DeleteSet
 
 
 # Main Function for CLI
