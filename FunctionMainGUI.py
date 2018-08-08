@@ -6,6 +6,10 @@ from tkinter import messagebox
 # Importing Items from Photo Imaging Library to allow images to be shown in the program
 from PIL import ImageTk, Image
 
+# Importing Functions from FunctionsCLI file.
+# The Merge Sort and Binary Search functions are not included as they are called from within FunctionsCLI only.
+from FunctionsCLI import CreateSet, DeleteSet, SelectSet, ImportSet, ViewOverview, ViewSet, ListSetCreate, SaveSet
+
 
 # The Class that contains all of the GUI component
 class GUI:
@@ -21,19 +25,23 @@ class GUI:
     def ViewOverviewPage(self, master):
 
         # Default Page
+        self.currentSetName = StringVar()
+        self.currentSetName.set(currentSetNameString)
+        self.currentSetFile = StringVar()
+        self.currentSetFile.set(currentSetFileString)
+
         self.ViewOverviewPageContents = True
         while self.ViewOverviewPageContents:
             self.FmePage1ViewOverview = Frame(master)
 
             # Widget 1
-            self.LblSet = Label(self.FmePage1ViewOverview, text='setName', bg='orange', width=32)
+            self.LblSet = Label(self.FmePage1ViewOverview, textvariable=self.currentSetName, bg='orange', width=32)
             self.LblSet.config(font=('Arial', 32, 'bold underline'))
             self.LblSet.grid(row=0, column=0, rowspan=1, columnspan=4)
 
 
             # Widget 2
-            self.cards = []
-            self.ViewOverviewTable()
+            self.ViewOverviewTable(listSet)
 
 
             # Widget 3
@@ -149,7 +157,7 @@ class GUI:
             self.BtnView.grid(row=11, column=5, rowspan=1, columnspan=3)
 
             # Widget 8
-            self.BtnDelete = Button(self.FmePage1ViewOverview, text='Delete Set')
+            self.BtnDelete = Button(self.FmePage1ViewOverview, text='Delete Set', command=lambda *args: self.ViewOverviewDelete(listSetName))
             self.BtnView.config(font=('Times', 16))
             self.BtnDelete.grid(row=13, column=5, rowspan=1)
 
@@ -175,23 +183,26 @@ class GUI:
         self.FmePage1ViewOverview.grid(column=0, row=0, columnspan=3)
 
     # Function to create the table                  PAGE CHILD FUNCTION
-    def ViewOverviewTable(self):
-
-        # Creating List
+    def ViewOverviewTable(self, listSet):
+        print('\nViewOverviewTable Ran')
+        # Creating list
         self.count = 0
-        if len(self.cards) < 1:
-            while self.count < 24:
-                self.VarCardT = StringVar()
-                self.VarCardT.set(('term' + str(self.count)))
+        self.cards = []
+        for i in range(0, len(listSet[1])):
+            self.VarCardT = StringVar()
+            self.VarCardT.set(listSet[1][self.count][0])
 
-                self.VarCardD = StringVar()
-                self.VarCardD.set(('def' + str(self.count)))
+            self.VarCardD = StringVar()
+            self.VarCardD.set(listSet[1][self.count][1])
 
-                self.VarCardI = StringVar()
-                self.VarCardI.set(('IMG' + str(self.count)))
+            self.VarCardI = StringVar()
+            self.VarCardI.set(listSet[1][self.count][2])
 
-                self.cards.append([self.VarCardT, self.VarCardD, self.VarCardI])
-                self.count += 1
+            self.VarCardF = StringVar()
+            self.VarCardF.set(listSet[1][self.count][3])
+
+            self.cards.append([self.VarCardT, self.VarCardD, self.VarCardI, self.VarCardF])
+            self.count += 1
 
         # Defining a temporary variable to store the number of card for determining table size
         self.noCards = (len(self.cards) * 2) + 3
@@ -230,10 +241,6 @@ class GUI:
         self.LblImgHeader.config(font=('Times', 17, 'underline'))
         self.LblImgHeader.grid(row=1, column=5)
 
-        # Creating a list of dummy data to appear in form:
-        # [['term1', 'def1', 'img1'], ['term2', 'def2', 'img2'], ['term3', 'def3', 'img3'],
-        #              ['term4', 'def5', 'img6'], ['term7', 'def7', 'img7'], ['term8', 'def8', 'img8']
-        #         , ['term9', 'def9', 'img9'], ['term10', 'def10', 'img10'], ['term11', 'def11', 'img11']]
 
         # Placing the table in the grid so it appears by default
         self.FmeTableView.grid(row=2, column=1, rowspan=(len(self.cards) * 3) + (len(self.cards)) + 3, columnspan=3)
@@ -363,6 +370,9 @@ class GUI:
                 self.EntImg.config(font=('Times', 14))
                 self.EntImg.grid(row=i, column=5)
 
+                # Keeping the star/unstar value
+                self.LstEditCardsSub.append(self.cards[self.count][3])
+
                 self.count += 1
                 self.LstEditCards.append(self.LstEditCardsSub)
 
@@ -399,15 +409,25 @@ class GUI:
                     self.LblBorder.grid(row=i, column=j)
                     self.border.append(self.LblBorder)
 
-    # Function to change the currently viewed set   CLI Merge
+    # Function to change the currently viewed set   COMPLETE
     def ViewOverviewSelect(self):
-        print('Select Clicked')
-        wantedSet = self.VarSelectInput.get()
-        print('self.VarSelectInput =', wantedSet)
-        # Ready to merge with CLI
+        # Call the Select Set Function with input from entry field as wantedSet argument.
+        self.location = SelectSet(self.VarSelectInput.get(), listSetName)
+        if self.location == -1:
+            messagebox.showinfo('Does not Exist', 'The name of the set you entered does not exist.\n'
+                                                        'Re-enter a name and try again.')
+            return
+        # Reset the currentSetName and currentSetFile using output from SelectSet Function
+        self.currentSetName.set(listSetName[self.location][0])
+        self.currentSetFile.set(listSetName[self.location][1])
+
+        # Call ListSetCreate Function to recreate listSet but with the new set
+        listSet = ListSetCreate(self.currentSetFile.get())
+        # Recall the table function to update the table
+        self.ViewOverviewTable(listSet)
 
     # Function for the ViewOverview Page to change to table from label to entry
-    #                                               CLI Merge
+    #                                               Comments
     def ViewOverviewEditSaveBtn(self):
         #     # WIP changes are not saved
         status = self.VarEditSaveBtnBool.get()
@@ -429,14 +449,16 @@ class GUI:
             self.LstNew = []
             for i in self.LstEditCards:
                 self.LstNewSub = []
+                self.count = 0
                 for j in i:
                     x = j.get()
-                    if x != '':
+                    if x != '' or self.count == 3:
                         self.LstNewSub.append(x)
                     else:
                         messagebox.showinfo('Saving', 'Changes could not be saved as there was a blank space.')
                         # Aborts the function
                         return
+                    self.count += 1
                 self.LstNew.append(self.LstNewSub)
 
             # Rewriting self.LstCards but each string is a StringVar()
@@ -448,19 +470,45 @@ class GUI:
                     index.set(j)
                     self.LstNew2Sub.append(index)
                 self.LstNew2.append(self.LstNew2Sub)
-
             self.cards = self.LstNew2
+
+            self.CardsStrings = []
+            for i in self.cards:
+                self.CardsStringsSub = []
+                self.CardsStringsSub.append(i[0].get())
+                self.CardsStringsSub.append(i[1].get())
+                self.CardsStringsSub.append(i[2].get())
+                self.CardsStringsSub.append(i[3].get())
+                self.CardsStrings.append(self.CardsStringsSub)
+
+            SaveSet(self.currentSetName.get(), self.currentSetFile.get(), self.CardsStrings)
 
             # Removes the edit table
             self.FmeTableEdit.grid_remove()
 
-            self.ViewOverviewTable()
+            listSet = [self.currentSetName.get(), self.CardsStrings]
+            self.ViewOverviewTable(listSet)
 
             # Code to place the view version of the table in the grid
             self.FmeTableView.grid(row=2, column=1, rowspan=(len(self.cards) * 3) + (len(self.cards)) + 3, columnspan=3)
 
             self.VarEditSaveBtnText.set('Edit Set')
         self.VarEditSaveBtnBool.set(status)
+
+    # Function to delete the current set            WIP
+    def ViewOverviewDelete(self, listSetName):
+        self.confirm = messagebox.askyesno('Confirm', 'ARE YOU SURE.\n\nThis action can not be undone.', icon='warning')
+        if self.confirm:
+            listSetName = DeleteSet(listSetName, self.currentSetName, self.currentSetFile)
+            print('confirm')
+            self.currentSetName.set(listSetName[-1][0])
+            self.currentSetFile.set(listSetName[-1][1])
+            print('self.currentSetName =', self.currentSetName.get(), 'self.currentSetFile =', self.currentSetFile.get())
+            print('listSetName =', listSetName)
+            self.ViewOverviewTable(listSetName[1])
+        if not self.confirm:
+            messagebox.showinfo('Confirm', 'Delete Cancelled', icon='warning')
+            return
 
 
     # Function for the Create Page                  PAGE FUNCTION
@@ -1055,20 +1103,22 @@ except FileNotFoundError:
     listSetName = []
 
 # Setting the current/default set. Takes the last set on the listSetName list and records the setName and fileName
-currentSetName = listSetName[-1][0]
-currentSetFile = listSetName[-1][1]
+currentSetNameString = listSetName[-1][0]
+currentSetFileString = listSetName[-1][1]
 
-
-
+listSet = ListSetCreate(currentSetFileString)
 
 print('listSetName =', listSetName)
-print('currentSetName =', currentSetName)
-print('currentSetFile =', currentSetFile)
+print('currentSetNameString =', currentSetNameString)
+print('currentSetFileString =', currentSetFileString)
+print('listSet =', listSet)
 
 # Calls the GUI
 GUI = GUI(root)
 # Runs the window
 root.mainloop()
+
+# Writes listSetName to the file
 fileListSetName = open('fileListSetName.txt', 'w')
 for set in listSetName:
     fileListSetName.write(set[0])

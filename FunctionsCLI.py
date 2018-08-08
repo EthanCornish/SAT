@@ -79,10 +79,9 @@ def CreateSet(listSetName):
     return listSetName
 
 
-# Function for editing sets
-# setName is the name of the set that is being edited
-# setFile is the name of the file the set is in
-def EditSet(setName, setFile):
+# Function to create listSet which contains listCard
+# setFile is the name of the file the set is stored in
+def ListSetCreate(setFile):
     # Reading file and creating listSet
     # This may be put in a different function to be used by FunctionViewOverview and FunctionViewSet
     file = open(setFile, 'r')
@@ -103,6 +102,14 @@ def EditSet(setName, setFile):
             listCardSub.append(line[3])
             listCard.append(listCardSub)
     listSet.append(listCard)
+    return listSet
+
+
+# Function for editing sets
+# setName is the name of the set that is being edited
+# setFile is the name of the file the set is in
+def EditSet(setName, setFile):
+    listSet = ListSetCreate(setFile)
 
     # Providing information and instructions for the user
     print('\nThe set currently contains {0} cards.'.format(len(listSet[1])))
@@ -192,7 +199,7 @@ def EditSet(setName, setFile):
         print('Saving Set')
 
     # Redefining listSet
-    listSet = [setName, listCard]
+    listSet = [listSet[0], listCard]
 
     # Saving the set using the same code as FunctionCreateSet
     file = open(setFile, 'w')
@@ -210,6 +217,26 @@ def EditSet(setName, setFile):
     return
 
 
+# Function for saving sets
+# setName is the name of the set that is being edited
+# setFile is the name of the file the set is in
+# listCards is the list that contains the cards in the set
+def SaveSet(setName, setFile, listCards):
+    # Saving the set using the same code as FunctionCreateSet
+    file = open(setFile, 'w')
+    file.write(setName)
+    file.write('\n')
+    for a in listCards:
+        for b in a:
+            file.write(b)
+            file.write(',')
+        file.write('\n')
+    file.close()
+
+    print('Set Saved')
+
+
+
 # Function for deleting sets
 # listSetName is a list of lists that stores the name and file name for each set
 # setName is the name of the set that is being edited
@@ -217,67 +244,31 @@ def EditSet(setName, setFile):
 def DeleteSet(listSetName, setName, setFile):
     # Searching for the wanted set in listSetName.
     position = 0
-    found = False
-    setToDelete = ''
-    while not found:
-        # going through each set in listSetName
-        for set in listSetName:
-            # if the set is found setting it to the variable 'setToDelete' and ending the loop
-            if set[0] == setName:
-                setToDelete = set[0]
-                found = True
-                break
-            elif set[0] != setName:
-                position += 1
-
-    # Getting confirmation from user
-    print('Deleting Set {0}'.format(listSetName[position][0]))
-    print("Are You Sure? This action can not be undone. 'Yes' or 'No'")
-    confirm = input()
-    # While loop to give repeated tries to enter valid input
-    completed = False
-    while not completed:
-        # Deletes the set
-        if confirm == 'Yes' or confirm == 'yes':
-            completed = True
+    # Going through each set in listSetName
+    for i in listSetName:
+        # if the set is found setting it to the variable 'setToDelete' and ending the loop
+        if i[0] == setName:
             # Delete the set from listSetName
             listSetName.pop(position)
             # Deleting the file containing the set
             os.remove(setFile)
-            # Tells the user the set has been deleted
-            print('{0} has been deleted.'.format(setToDelete))
-        # Exits the while loop if the user does not want to delete the set
-        elif confirm == 'No' or confirm == 'no':
-            print('{0} has not been deleted.'.format(setToDelete))
-            completed = True
-        else:
-            # Re asks for valid input
-            print("'Yes' or 'No' has not been entered")
-            print("Enter 'Yes' or 'No'.")
-            confirm = input()
-    return
-
+            print('DeleteSetFunction    listSetName =', listSetName)
+            return listSetName
+        position += 1
+    print('For loop ended')
+    return listSetName
 
 # Function to change the currently viewed set
 # listSetName is a list of lists that stores the name and file name for each set
-def SelectSet(listSetName):
-    # Providing a list of sets
-    print('Your sets are:')
-    for set in listSetName:
-        print("  {0}".format(set[0]))
-    # Getting name of the set to be changed to
-    wantedSet = input('\nName of wanted Set:')
+def SelectSet(wantedSet, listSetName):
     position = 0
     # going through each set in listSetName
     for i in listSetName:
         if i[0] == wantedSet:
-            # if the set is found informing the user and exiting the function
-            print('{0} was found and has been selected.'.format(wantedSet))
             return position
         position += 1
     # Informing the user that the set could not be found
     position = -1
-    print('{0} was not found. Choose the select set option again to retry.'.format(wantedSet))
     return position
 
 
@@ -350,24 +341,8 @@ def ImportSet(listSetName):
 # setName is the name of the set that is being edited
 # setFile is the name of the file the set is in
 def ViewOverview(setName, setFile):
-    # Reading file and creating listSet
-    file = open(setFile, 'r')
-    listSet = []
-    fileSetName = file.readline()
-    fileSetName = fileSetName.strip('\n')
-    listSet.append(fileSetName)
-
-    listCard = []
-    for line in file:
-        line = line.strip('\n')
-        if line != fileSetName:
-            line = line.split(',')
-            listCardSub = []
-            listCardSub.append(line[0])
-            listCardSub.append(line[1])
-            listCardSub.append(line[2])
-            listCard.append(listCardSub)
-    listSet.append(listCard)
+    # Calling the ListSetCreate Function to generate listSet
+    listSet = ListSetCreate(setFile)
 
     # Printing the name of the set.
     print('\nShowing an overview for {0}\n'.format(setName))
@@ -379,7 +354,11 @@ def ViewOverview(setName, setFile):
     return
 
 
+
+
+
 # Functions for viewing each card individually
+
 
 # The following functions contain complex algorithms
 
@@ -507,25 +486,8 @@ def RndCardOrder(currentCardNumber, listSet, shownCards):
 
 # Generates the cards individually with three viewing options
 def ViewSet(setName, setFile):
-    # Reading file and creating listSet
-    file = open(setFile, 'r')
-    listSet = []
-    fileSetName = file.readline()
-    fileSetName = fileSetName.strip('\n')
-    listSet.append(fileSetName)
-
-    listCard = []
-    for line in file:
-        line = line.strip('\n')
-        if line != fileSetName:
-            line = line.split(',')
-            listCardSub = []
-            listCardSub.append(line[0])
-            listCardSub.append(line[1])
-            listCardSub.append(line[2])
-            listCardSub.append(line[3])
-            listCard.append(listCardSub)
-    listSet.append(listCard)
+    # Calling the ListSetCreate Function to generate listSet
+    listSet = ListSetCreate(setFile)
 
     # Setting the viewing options
 
