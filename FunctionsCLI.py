@@ -252,10 +252,8 @@ def DeleteSet(listSetName, setName, setFile):
             listSetName.pop(position)
             # Deleting the file containing the set
             os.remove(setFile)
-            print('DeleteSetFunction    listSetName =', listSetName)
             return listSetName
         position += 1
-    print('For loop ended')
     return listSetName
 
 # Function to change the currently viewed set

@@ -500,7 +500,6 @@ class GUI:
         self.confirm = messagebox.askyesno('Confirm', 'ARE YOU SURE.\n\nThis action can not be undone.', icon='warning')
         if self.confirm:
             listSetName = DeleteSet(listSetName, self.currentSetName, self.currentSetFile)
-            print('confirm')
             self.currentSetName.set(listSetName[-1][0])
             self.currentSetFile.set(listSetName[-1][1])
             print('self.currentSetName =', self.currentSetName.get(), 'self.currentSetFile =', self.currentSetFile.get())
