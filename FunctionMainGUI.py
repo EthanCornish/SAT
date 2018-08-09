@@ -8,7 +8,7 @@ from PIL import ImageTk, Image
 
 # Importing Functions from FunctionsCLI file.
 # The Merge Sort and Binary Search functions are not included as they are called from within FunctionsCLI only.
-from FunctionsCLI import CreateSet, DeleteSet, SelectSet, ImportSet, ViewOverview, ViewSet, ListSetCreate, SaveSet
+from FunctionsCLI import *
 
 
 # The Class that contains all of the GUI component
@@ -90,8 +90,6 @@ class GUI:
             # Variable for default side
             self.VarDefaultSideInput = IntVar()
 
-            self.VarDefaultSideInput = 3
-
             # Radio Buttons for default side
             self.RbDefaultSideTerm = Radiobutton(self.FmeOptions, text='Term', variable=self.VarDefaultSideInput, value=1, anchor=W, width=8)
             self.RbDefaultSideTerm.config(font=('Times', 14))
@@ -120,7 +118,7 @@ class GUI:
             # Radio Buttons for ViewFullStar
             self.RbViewFull = Radiobutton(self.FmeOptions, text='Full Set', variable=self.VarViewFullStarInput, value=1, width=8, anchor=W)
             self.RbViewFull.config(font=('Times', 14))
-            self.RbViewStar = Radiobutton(self.FmeOptions, text='Starred Cards Only', variable=self.VarViewFullStarInput, value=16, anchor=W)
+            self.RbViewStar = Radiobutton(self.FmeOptions, text='Starred Cards Only', variable=self.VarViewFullStarInput, value=2, width=16, anchor=W)
             self.RbViewStar.config(font=('Times', 14))
 
             # Setting 'Full' as the default option
@@ -858,7 +856,7 @@ class GUI:
         self.FmePage3View = Frame(master)
 
         # Widget 1
-        self.LblName = Label(self.FmePage3View, text='setName', width=23, bg='Orange')
+        self.LblName = Label(self.FmePage3View, textvariable=self.currentSetName, width=23, bg='Orange')
         self.LblName.config(font=('Arail', 32, 'bold underline'))
         self.LblName.grid(row=0, column=0, rowspan=1, columnspan=5)
 
@@ -866,30 +864,53 @@ class GUI:
         self.FmeDisplay = Frame(self.FmePage3View)
         self.FmeDisplay.grid(row=2, column=1, rowspan=9, columnspan=5)
 
+        # Defining a variable to store the number card that is being shown
+        self.number = 0
 
         # Can show text 8 lines high and 30 characters wide
-        self.VarCardShow = StringVar()
-        self.VarCardShow.set('ENTER TEXT HERE')
-        self.LblCard = Label(self.FmeDisplay, height=8, width=30, textvariable=self.VarCardShow)
-        self.LblCard.config(font=('Times', 32))
-        self.LblCard.grid(row=1, column=1)
 
-      #  self.ImgDirectory = StringVar()
-       # self.ImgDirectory.set('/Users/19ecornish/Desktop#/ajax-loader.gif')
-        # Opening the image file
-      #  self.ImgTemp = Image.open(self.ImgDirectory.get())
-        # Resizing the image
-      #  self.ImgTemp = self.ImgTemp.resize((367, 275), Image.ANTIALIAS)  # (width,height)
-        # Saving the image to a file in a format recognised by tkinter
-      #  self.ImgTemp.save('ImageTempFile.gif', 'gif')
-        # Opening the image file as a PhotoImage object
-      #  self.ImgObj = PhotoImage(file='ImageTempFile.gif')
-        # Placing the image object in a label
-      #  self.ImgLabel = Label(self.FmeDisplay, image=self.ImgObj)
-        # Setting the image method of the label to the image object
-      #  self.ImgLabel.image = self.ImgObj
-        # Placing the label on the grid
-      #  self.ImgLabel.grid(row=1, column=1)
+        # Defining a label to show the term of the card
+        self.VarCardShowTerm = StringVar()
+        self.VarCardShowTerm.set(self.cards[self.number][0].get())
+        self.LblCardTerm = Label(self.FmeDisplay, height=8, width=30, textvariable=self.VarCardShowTerm)
+        self.LblCardTerm.config(font=('Times', 32))                                                         # If the default side is set to term show the definition for the first card
+
+        # Defining a label to show the def of the card
+        self.VarCardShowDef = StringVar()
+        self.VarCardShowDef.set(self.cards[self.number][1].get())
+        self.LblCardDef = Label(self.FmeDisplay, height=8, width=30, textvariable=self.VarCardShowDef)
+        self.LblCardDef.config(font=('Times', 32))
+
+        # Defining a label to show the image of the card
+        try:
+            self.ImgDirectory = StringVar()
+            self.ImgDirectory.set(self.cards[self.number][2].get())
+            # Opening the image file
+            self.ImgTemp = Image.open(self.ImgDirectory.get())
+            # Resizing the image
+            self.ImgTemp = self.ImgTemp.resize((367, 275), Image.ANTIALIAS)  # (width,height)
+            # Saving the image to a file in a format recognised by tkinter
+            self.ImgTemp.save('ImageTempFile.gif', 'gif')
+            # Opening the image file as a PhotoImage object
+            self.ImgObj = PhotoImage(file='ImageTempFile.gif')
+            # Placing the image object in a label
+            self.LblCardImg = Label(self.FmeDisplay, image=self.ImgObj)
+            # Setting the image method of the label to the image object
+            self.LblCardImg.image = self.ImgObj
+        except FileExistsError or FileNotFoundError or IsADirectoryError or NotADirectoryError:
+            messagebox.showinfo('File Error', 'Directory for this image is invalid.', icon='warning')
+
+        # Depending on what the default side is, place the correct label defined above on the grid
+        print('self.VarDefaultSideInput.get() =', self.VarDefaultSideInput.get())
+        if self.VarDefaultSideInput.get() == 1:
+            self.LblCardTerm.grid(row=1, column=1)
+        # If the default side is set to deinition show the definition for the first card
+        elif self.VarDefaultSideInput.get() == 2:
+            self.LblCardDef.grid(row=1, column=1)
+        # If the default side is set to image show the image for the first card
+        elif self.VarDefaultSideInput.get() == 3:
+            self.LblCardImg.grid(row=1, column=1)
+
 
         # Border around content
         self.LblBorder1 = Label(self.FmeDisplay, height=2, width=4, bg='grey90')
@@ -984,7 +1005,7 @@ class GUI:
 
         self.FmePage3View.grid()
 
-    # Function to go back to ViewOverview Page      COMPLETE
+    # Function to go back to ViewOverview Page      COMPLETE, Needs to rewrite listSet to save Star/Unstar Changes
     def ViewBack(self):
         self.FmePage3View.grid_remove()
         self.ViewOverviewPage(self.master)
@@ -997,21 +1018,53 @@ class GUI:
     def ViewPrevious(self):
         print('ViewPrevious')
 
-    # Function to show the term                    WIP
+    # Function to show the term                    COMPLETE
     def ViewTerm(self):
         print('ViewTerm')
+        try:
+            self.LblCardDef.grid_remove()
+        except AttributeError:
+            print('self.LblCardDef: Attribute Error')
+        try:
+            self.LblCardImg.grid_remove()
+        except AttributeError:
+            print('self.LblCardImg: Attribute Error')
 
-    # Function to show the image                   WIP
+        self.LblCardTerm.grid(row=1,column=1)
+
+    # Function to show the image                   COMPLETE
     def ViewImage(self):
         print('ViewImage')
+        try:
+            self.LblCardTerm.grid_remove()
+        except AttributeError:                         
+            print('self.LblCardTerm: Attribute Error')
+        try:
+            self.LblCardDef.grid_remove()
+        except AttributeError:
+            print('self.LblCardDef: Attribute Error')
 
-    # Function to show the definition              WIP
+        self.LblCardImg.grid(row=1,column=1)
+
+    # Function to show the definition              COMPLETE
     def ViewDef(self):
         print('ViewDefinition')
+        try:
+            self.LblCardTerm.grid_remove()
+        except AttributeError:
+            print('self.LblCardTerm: Attribute Error')
+        try:
+            self.LblCardImg.grid_remove()
+        except AttributeError:
+            print('self.LblCardImg: Attribute Error')
 
-    # Function to go to the next card           WIP
+        self.LblCardDef.grid(row=1,column=1)
+
+
+    # Function to go to the next card               WIP
     def ViewNext(self):
         print('ViewNext')
+        
 
     # Function for the Help Page                    Needs Text
     def HelpPage(self):
@@ -1110,6 +1163,8 @@ class GUI:
         # changed is a button is pressed. By default the label will be blank but have space for text in window by having
         # hard coded width and height.
 
+
+
 # Code to create the window
 root = Tk()
 root.geometry('1000x800')
@@ -1156,4 +1211,4 @@ for set in listSetName:
     fileListSetName.write('\n')
 fileListSetName.close()
 
-print('SAVED')
+print('SAVED listSetName =', listSetName)
