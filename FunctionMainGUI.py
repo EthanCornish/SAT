@@ -184,7 +184,6 @@ class GUI:
 
     # Function to create the table                  PAGE CHILD FUNCTION
     def ViewOverviewTable(self, listSet):
-        print('\nViewOverviewTable Ran')
         # Creating list
         self.count = 0
         self.cards = []
@@ -495,16 +494,15 @@ class GUI:
             self.VarEditSaveBtnText.set('Edit Set')
         self.VarEditSaveBtnBool.set(status)
 
-    # Function to delete the current set            WIP
+    # Function to delete the current set            Comments
     def ViewOverviewDelete(self, listSetName):
         self.confirm = messagebox.askyesno('Confirm', 'ARE YOU SURE.\n\nThis action can not be undone.', icon='warning')
         if self.confirm:
-            listSetName = DeleteSet(listSetName, self.currentSetName, self.currentSetFile)
+            listSetName = DeleteSet(listSetName, self.currentSetName.get(), self.currentSetFile.get())
             self.currentSetName.set(listSetName[-1][0])
             self.currentSetFile.set(listSetName[-1][1])
-            print('self.currentSetName =', self.currentSetName.get(), 'self.currentSetFile =', self.currentSetFile.get())
-            print('listSetName =', listSetName)
-            self.ViewOverviewTable(listSetName[1])
+            listSet = ListSetCreate(self.currentSetFile.get())
+            self.ViewOverviewTable(listSet)
         if not self.confirm:
             messagebox.showinfo('Confirm', 'Delete Cancelled', icon='warning')
             return
@@ -520,7 +518,7 @@ class GUI:
 
         # Widget 1
         self.VarName = StringVar()
-        self.VarName.set('Name of Set')
+        self.VarName.set('Enter Name of Set')
         self.EntName = Entry(self.FmePage2CreateSet, textvariable=self.VarName, width=24, bg='Orange')
         self.EntName.config(font=('Arail', 32, 'bold underline'))
         self.EntName.grid(row=0,column=0,rowspan=2,columnspan=4)
@@ -550,7 +548,7 @@ class GUI:
         self.BtnSave.grid(row=1, column=5, rowspan=1, columnspan=1)
 
         # Widget 5
-        self.BtnDelete = Button(self.FmePage2CreateSet, text='Delete Set', width=16, command=self.CreateDelete)
+        self.BtnDelete = Button(self.FmePage2CreateSet, text='Cancel Set Creation', width=16, command=self.CreateDelete)
         self.BtnDelete.config(font=('Times', 16))
         self.BtnDelete.grid(row=8, column=5, rowspan=1, columnspan=1)
 
@@ -699,7 +697,7 @@ class GUI:
                     self.border.append(self.LblBorder)
 
     # Function to save the set that has just been made and change the screen back to ViewOverview
-    #                                               CLI MERGE
+    #                                               Comments
     def CreateSave(self):
             self.LstNew = []
             for i in self.LstCardsCreate:
@@ -712,11 +710,24 @@ class GUI:
                         messagebox.showinfo('Saving', 'Set could not saved as there was a blank space.')
                         return
                 self.LstNew.append(self.LstNewSub)
+
+            for i in self.LstNew:
+                i.append('no')
+            # Output is listCards from design and is ready to be merged with CLI
+
+            # Crete the name of the file to be stored in using the format, file_setName
+            self.setFile = ('file_'+str(self.EntName.get()))
+
+            # Write the set to a file using SaveSet function
+            SaveSet(self.EntName.get(), self.setFile, self.LstNew)
+
+            # Adding the set to listSetName
+            listSetName.append([self.EntName.get(), self.setFile])
             messagebox.showinfo('Saving', 'Set Saved Successfully.')
-            # Output is listCard from design and is ready to be merged with CLI
 
             # Removing the frame containing everything from the create page
             self.FmePage2CreateSet.grid_remove()
+            # Returning to the ViewOverview Screen
             self.ViewOverviewPage(self.master)
 
     # Function to change the amount of rows in the table      COMPLETE
@@ -755,22 +766,17 @@ class GUI:
         self.VarTableRowSpan = numRow
         self.CreateTable()
 
-    # Function to delete the set being made         COMPLETE
+    # Function to delete the set being made         Comments
     def CreateDelete(self):
-        self.message = 'Are you sure you want to delete this set?\nThis will return you to the Start-up screen and ' \
+        self.message = 'Are you sure you want to cancel set creation?\nThis will return you to the Start-up screen and ' \
                        'progress will be lost.\nThis can not be undone.'
-        self.VarContinue = messagebox.askokcancel(title='Delete', message=self.message, )
+        self.VarContinue = messagebox.askokcancel(title='Cancel', message=self.message, )
         if self.VarContinue:
             self.FmePage2CreateSet.grid_remove()
             self.ViewOverviewPage(self.master)
             return
-        elif not self.VarContinue:
-            messagebox.showinfo(title='Delete', message='Delete Cancelled')
-        else:
-            print('Error self.VarContinue != True or False')
-            print('self.VarContinue =', self.VarContinue)
 
-    # Function to import a set                      CLI Merge
+    # Function to import a set                      Comments
     def CreateImport(self):
         self.ImportPageContents = True
         while self.ImportPageContents:
@@ -784,18 +790,28 @@ class GUI:
             self.LblImTitle.config(font=('Arail', 28, 'underline'))
             self.LblImTitle.grid(row=0,column=0,rowspan=1,columnspan=2)
 
+            self.LblImSetName = Label(self.FmeImportPage, text='Name of Set:')
+            self.LblImSetName.config(font=('Times', 16))
+            self.LblImSetName.grid(row=1, column=0, rowspan=1, columnspan=1)
+
+            self.VarImSetName = StringVar()
+            self.VarImSetName.set('Enter Name Here')
+            self.EntImSetName = Entry(self.FmeImportPage, textvariable=self.VarImSetName, width=20)
+            self.EntImSetName.config(font=('Times', 16))
+            self.EntImSetName.grid(row=1, column=1, rowspan=1, columnspan=1)
+
             self.LblImPrompt = Label(self.FmeImportPage, text='Directory of Import File:')
             self.LblImPrompt.config(font=('Times', 16))
-            self.LblImPrompt.grid(row=1,column=0,rowspan=1,columnspan=1)
+            self.LblImPrompt.grid(row=2,column=0,rowspan=1,columnspan=1)
 
-            self.VarDirectory = StringVar()
-            self.EntImDir = Entry(self.FmeImportPage, textvariable=self.VarDirectory, width=20)
+            self.VarImDirectory = StringVar()
+            self.EntImDir = Entry(self.FmeImportPage, textvariable=self.VarImDirectory, width=20)
             self.EntImDir.config(font=('Times', 16))
-            self.EntImDir.grid(row=1,column=1,rowspan=1,columnspan=1)
+            self.EntImDir.grid(row=2,column=1,rowspan=1,columnspan=1)
 
-            self.BtnImImport = Button(self.FmeImportPage, text='Import File', width=40, command=lambda *args: ImImport(self, self.VarDirectory))
+            self.BtnImImport = Button(self.FmeImportPage, text='Import File', width=40, command=lambda *args: ImImport(self, self.VarImDirectory.get(), self.VarImSetName.get()))
             self.BtnImImport.config(font=('Times', 16))
-            self.BtnImImport.grid(row=2,column=0,rowspan=1,columnspan=2)
+            self.BtnImImport.grid(row=3,column=0,rowspan=1,columnspan=2)
 
             self.VarImTxt = StringVar()
             self.VarImTxt.set('Imported sets must be a CSV (Comma Separated Value) file in the following form;\n'
@@ -803,21 +819,35 @@ class GUI:
                      'represents a different card.')
             self.LblImTxt = Label(self.FmeImportPage, textvariable=self.VarImTxt, anchor=NW)
             self.LblImTxt.config(font=('Times', 16))
-            self.LblImTxt.grid(row=3,column=0,rowspan=1,columnspan=2)
+            self.LblImTxt.grid(row=4,column=0,rowspan=1,columnspan=2)
 
             self.BtnImExit = Button(self.FmeImportPage, text='Cancel Import', command=self.WinImport.destroy)
             self.BtnImExit.config(font=('Times', 16))
-            self.BtnImExit.grid(row=4,column=1,rowspan=1,columnspan=1)
+            self.BtnImExit.grid(row=5,column=1,rowspan=1,columnspan=1)
 
             self.LblBlank = Label(self.FmeImportPage, width=14, height=1)
-            self.LblBlank.grid(row=4, column=0,rowspan=1,columnspan=1)
+            self.LblBlank.grid(row=5, column=0,rowspan=1,columnspan=1)
 
             self.ImportPageContents = False
 
         # Function to be merged with CLI
-        def ImImport(self, directory):
-            print('SUB FUNCTION')
+        def ImImport(self, directory, setName):
+            setFile = ('file_' + str(setName))
 
+            self.check = ImportSet(listSetName, directory, setName, setFile)
+            if self.check:
+                listSetName.append([setName, setFile])
+                messagebox.showinfo('Import', 'Import Successful\nReturning to start-up screen')
+
+                # Closing the import window
+                self.WinImport.destroy()
+                # Removing the frame containing everything from the create page
+                self.FmePage2CreateSet.grid_remove()
+                # Returning to the ViewOverview Screen
+                self.ViewOverviewPage(self.master)
+            elif not self.check:
+                messagebox.showinfo('Import', 'Import Unsuccessful\nCheck the directory, file type and the import format.')
+                return
 
     # Function for the View Page                    PAGE FUNCTION
     def ViewPage(self, master):

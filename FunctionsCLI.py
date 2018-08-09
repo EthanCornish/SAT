@@ -233,10 +233,6 @@ def SaveSet(setName, setFile, listCards):
         file.write('\n')
     file.close()
 
-    print('Set Saved')
-
-
-
 # Function for deleting sets
 # listSetName is a list of lists that stores the name and file name for each set
 # setName is the name of the set that is being edited
@@ -272,33 +268,14 @@ def SelectSet(wantedSet, listSetName):
 
 # Function to import a set
 # listSetName is a list of lists that stores the name and file name for each set
-def ImportSet(listSetName):
-    # Providing Basic Guidelines
-    print('Imported sets must be a CSV (Comma Separated Value) file in the following form;')
-    print('term,definition,img_directory\nterm,definition,img_directory\nterm,definition,img_directory\n...,...,...')
-    print('Where each line represents a different card.\n\n')
+def ImportSet(listSetName, setDirectory, setName, setFile):
 
-    # Getting the name of the set and the name of the file from the user
-    print('\nEnter a Name for the set.')
-    setName = input(':')
-    print('Enter the name of the file to save the set in.')
-    setFile = input(':')
-
-    # Adding the setName and fileName to listSetName
-    # The adding to listSetName is at the end in case the file directory is invalid.
-    listSetNameSub = [setName, setFile]
-    listSetName.append(listSetNameSub)
-
-    # Getting the location of the file the set is stored in
-    print('Location of the file (file directory). E.g. /Users/19ecornish/Downloads/fileName.csv')
-    setDirectory = input(':')
 
     # Opening the file. If the file directory is incorrect then the function exits.
     try:
         importFile = open(setDirectory, 'r')
-    except FileNotFoundError:
-        print('The file could not be found.\nExiting Import Set')
-        return
+    except FileNotFoundError or IsADirectoryError:
+        return False
     # Defining listCard
     listCard = []
 
@@ -312,9 +289,8 @@ def ImportSet(listSetName):
             listCardSub.append(line[2])
             listCard.append(listCardSub)
     # If a UnicodeDecodeError occurs due to the file format the functions exits without crashing.
-    except UnicodeDecodeError:
-        print('Invalid file type.\nExiting Import Set')
-        return listSetName
+    except UnicodeDecodeError or IndexError:
+        return False
     listSet = [setName, listCard]
     importFile.close()
 
@@ -328,11 +304,7 @@ def ImportSet(listSetName):
             file.write(',')
         file.write('\n')
     file.close()
-
-    print('Set Saved')
-
-    listSetName.append(listSetNameSub)
-    return listSetName
+    return True
 
 
 # Function to show an overview of the set
