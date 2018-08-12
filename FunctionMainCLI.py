@@ -5,9 +5,9 @@ from FunctionsCLI import EditSet
 # Importing the 'SelectSet' Function
 from FunctionsCLI import SelectSet
 # Importing the 'ViewOverview' Function
-from FunctionsCLI import ViewOverview
+from FunctionViewOverviewCLI import ViewOverview
 # Importing the 'ViewSet' Function
-from FunctionsCLI import ViewSet
+from FunctionViewSetCLI import ViewSet
 # Importing the 'ImportSet' Function
 from FunctionsCLI import ImportSet
 # Importing the 'ExportSet' Function

@@ -223,6 +223,7 @@ def EditSet(setName, setFile):
 # listCards is the list that contains the cards in the set
 def SaveSet(setName, setFile, listCards):
     # Saving the set using the same code as FunctionCreateSet
+    print('listCards =', listCards)
     file = open(setFile, 'w')
     file.write(setName)
     file.write('\n')
@@ -432,34 +433,33 @@ def BinarySearch(list, wanted):
 
 
 # Function to generate a random number that has not been previously generated.
-def RndCardOrder(currentCardNumber, listSet, shownCards):
+def RndCardOrder(currentCardNumber, listCards, shownCards):
     # Add the current card to the list of shown cards
     shownCards.append(currentCardNumber)
-
     # If the number of previously shown cards is the same as the number of cards then set x to the number of cards
     #   this will trigger a catch in the ViewSet Function
-    if len(shownCards) == len(listSet[1]):
-        x = len(listSet[1])
+    if len(shownCards) == len(listCards):
+        x = len(listCards)
         return x
 
     generate = True
     while generate:
         # Generate a random number between 0 and the number of index's in the list of drawn numbers
-        x = random.randint(0, len(listSet[1])-1)
+        x = random.randint(0, len(listCards)-1)
         # Make the random number an int to prevent a TypeError
         x = int(x)
         # Sort the cards in the list
         shownCards = MergeSort(shownCards)
-
-        if not BinarySearch(shownCards, x):
+        print('x =', x)
+        found = BinarySearch(shownCards, x)
+        if not found:
             return x
+
 
 # Generates the cards individually with three viewing options
 def ViewSet(setName, setFile, viewFullFav, defaultSide, cardOrder):
     # Calling the ListSetCreate Function to generate listSet
     listSet = ListSetCreate(setFile)
-
-
 
     # Defining variables and informing the user of the set
     print('\n\nShowing the cards for {0}'.format(setName))
@@ -571,7 +571,7 @@ def ViewSet(setName, setFile, viewFullFav, defaultSide, cardOrder):
                     elif cardOrder == 'Rnd':
                         # Call the CardOrderRnd Function
                         number = RndCardOrder(number, listSet, shownCards)
-                    # Decrese the number of times previous card has been selected
+                    # Decrease the number of times previous card has been selected
                     cycles -= 1
                     # Exit the menu
                     break

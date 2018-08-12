@@ -4,3 +4,5 @@ setB,file_setB
 setC,file_setC
 Enter Name Here,file_Enter Name Here
 setD,file_setD
+Boating Images,file_Boating Images
+setImages,file_setImages

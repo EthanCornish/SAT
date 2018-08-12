@@ -150,7 +150,11 @@ class GUI:
             self.RbCardOrderRnd.grid(row=5,column=1)
 
             # Widget 7
-            self.BtnView = Button(self.FmePage1ViewOverview, text='View Set', width=24, command=lambda *args: self.ViewPage(master))
+            self.number = 0
+            print('shownCards Defined')
+            self.shownCards = []
+            self.cycles = 0
+            self.BtnView = Button(self.FmePage1ViewOverview, text='View Set', width=24, command=lambda *args: self.ViewPage(master, self.number))
             self.BtnView.config(font=('Times', 16))
             self.BtnView.grid(row=11, column=5, rowspan=1, columnspan=3)
 
@@ -848,179 +852,259 @@ class GUI:
                 return
 
     # Function for the View Page                    PAGE FUNCTION
-    def ViewPage(self, master):
-        # Removing the frame containing ViewOverviewPage
-        self.FmePage1ViewOverview.grid_remove()
+    def ViewPage(self, master, number):
+        # Checks if there are more cards
+        if number < len(self.cards):
+            # If the user selected view all or view Fav AND the current card is a favourite
+            if self.VarViewFullStarInput.get() == 1 or self.VarViewFullStarInput.get() == 2 and self.cards[number][3].get() == 'yes':
+                # Removing the frame containing ViewOverviewPage
+                self.FmePage1ViewOverview.grid_remove()
 
-        # Creating the frame to store the contents of Create Page grid line at bottom of function
-        self.FmePage3View = Frame(master)
+                # Creating the frame to store the contents of Create Page grid line at bottom of function
+                self.FmePage3View = Frame(master)
 
-        # Widget 1
-        self.LblName = Label(self.FmePage3View, textvariable=self.currentSetName, width=23, bg='Orange')
-        self.LblName.config(font=('Arail', 32, 'bold underline'))
-        self.LblName.grid(row=0, column=0, rowspan=1, columnspan=5)
+                # Widget 1
+                self.LblName = Label(self.FmePage3View, textvariable=self.currentSetName, width=23, bg='Orange')
+                self.LblName.config(font=('Arail', 32, 'bold underline'))
+                self.LblName.grid(row=0, column=0, rowspan=1, columnspan=5)
 
-        # Widget 2
-        self.FmeDisplay = Frame(self.FmePage3View)
-        self.FmeDisplay.grid(row=2, column=1, rowspan=9, columnspan=5)
-
-        # Defining a variable to store the number card that is being shown
-        self.number = 0
-
-        # Can show text 8 lines high and 30 characters wide
-
-        # Defining a label to show the term of the card
-        self.VarCardShowTerm = StringVar()
-        self.VarCardShowTerm.set(self.cards[self.number][0].get())
-        self.LblCardTerm = Label(self.FmeDisplay, height=8, width=30, textvariable=self.VarCardShowTerm)
-        self.LblCardTerm.config(font=('Times', 32))                                                         # If the default side is set to term show the definition for the first card
-
-        # Defining a label to show the def of the card
-        self.VarCardShowDef = StringVar()
-        self.VarCardShowDef.set(self.cards[self.number][1].get())
-        self.LblCardDef = Label(self.FmeDisplay, height=8, width=30, textvariable=self.VarCardShowDef)
-        self.LblCardDef.config(font=('Times', 32))
-
-        # Defining a label to show the image of the card
-        try:
-            self.ImgDirectory = StringVar()
-            self.ImgDirectory.set(self.cards[self.number][2].get())
-            # Opening the image file
-            self.ImgTemp = Image.open(self.ImgDirectory.get())
-            # Resizing the image
-            self.ImgTemp = self.ImgTemp.resize((367, 275), Image.ANTIALIAS)  # (width,height)
-            # Saving the image to a file in a format recognised by tkinter
-            self.ImgTemp.save('ImageTempFile.gif', 'gif')
-            # Opening the image file as a PhotoImage object
-            self.ImgObj = PhotoImage(file='ImageTempFile.gif')
-            # Placing the image object in a label
-            self.LblCardImg = Label(self.FmeDisplay, image=self.ImgObj)
-            # Setting the image method of the label to the image object
-            self.LblCardImg.image = self.ImgObj
-        except FileExistsError or FileNotFoundError or IsADirectoryError or NotADirectoryError:
-            messagebox.showinfo('File Error', 'Directory for this image is invalid.', icon='warning')
-
-        # Depending on what the default side is, place the correct label defined above on the grid
-        print('self.VarDefaultSideInput.get() =', self.VarDefaultSideInput.get())
-        if self.VarDefaultSideInput.get() == 1:
-            self.LblCardTerm.grid(row=1, column=1)
-        # If the default side is set to deinition show the definition for the first card
-        elif self.VarDefaultSideInput.get() == 2:
-            self.LblCardDef.grid(row=1, column=1)
-        # If the default side is set to image show the image for the first card
-        elif self.VarDefaultSideInput.get() == 3:
-            self.LblCardImg.grid(row=1, column=1)
+                # Widget 2
+                self.FmeDisplay = Frame(self.FmePage3View)
+                self.FmeDisplay.grid(row=2, column=1, rowspan=9, columnspan=5)
 
 
-        # Border around content
-        self.LblBorder1 = Label(self.FmeDisplay, height=2, width=4, bg='grey90')
-        self.LblBorder1.config(font=('Times', 16))
-        self.LblBorder1.grid(row=0, column=0)
-        self.LblBorder2 = Label(self.FmeDisplay, height=2, width=60, bg='grey90')
-        self.LblBorder2.config(font=('Times', 16))
-        self.LblBorder2.grid(row=0, column=1)
-        self.LblBorder3 = Label(self.FmeDisplay, height=2, width=4, bg='grey90')
-        self.LblBorder3.config(font=('Times', 16))
-        self.LblBorder3.grid(row=0, column=2)
-        self.LblBorder4 = Label(self.FmeDisplay, height=16, width=4, bg='grey90')
-        self.LblBorder4.config(font=('Times', 16))
-        self.LblBorder4.grid(row=1, column=0)
-        self.LblBorder5 = Label(self.FmeDisplay, height=16, width=4, bg='grey90')
-        self.LblBorder5.config(font=('Times', 16))
-        self.LblBorder5.grid(row=1, column=2)
-        self.LblBorder6 = Label(self.FmeDisplay, height=2, width=4, bg='grey90')
-        self.LblBorder6.config(font=('Times', 16))
-        self.LblBorder6.grid(row=2, column=0)
-        self.LblBorder7 = Label(self.FmeDisplay, height=2, width=60, bg='grey90')
-        self.LblBorder7.config(font=('Times', 16))
-        self.LblBorder7.grid(row=2, column=1)
-        self.LblBorder8 = Label(self.FmeDisplay, height=2, width=4, bg='grey90')
-        self.LblBorder8.config(font=('Times', 16))
-        self.LblBorder8.grid(row=2, column=2)
+                # Can show text 8 lines high and 30 characters wide
+                print('number =', number)
 
-        # Widget 3
-        self.BtnBack = Button(self.FmePage3View, text='Back', width=24, command=self.ViewBack)
-        self.BtnBack.config(font=('Times', 16))
-        self.BtnBack.grid(row=0, column=5, rowspan=1, columnspan=3)
 
-        # Widget 4
-        self.LblProgressLabel = Label(self.FmePage3View, text='Progress:', width=12)
-        self.LblProgressLabel.config(font=('Times', 16))
-        self.LblProgressLabel.grid(row=2, column=7, rowspan=1, columnspan=1)
+                # Defining a label to show the term of the card
+                self.VarCardShowTerm = StringVar()
+                self.VarCardShowTerm.set(self.cards[number][0].get())
+                self.LblCardTerm = Label(self.FmeDisplay, height=8, width=30, textvariable=self.VarCardShowTerm)
+                self.LblCardTerm.config(font=('Times', 32))                                                         # If the default side is set to term show the definition for the first card
 
-        # Widget 5
-        self.VarProgress = StringVar()
-        self.VarProgress.set('99/99')
-        self.LblProgressResults = Label(self.FmePage3View, textvariable=self.VarProgress, width=12, anchor='e')
-        self.LblProgressResults.config(font=('Times', 16))
-        self.LblProgressResults.grid(row=3, column=7, rowspan=1, columnspan=1)
+                # Defining a label to show the def of the card
+                self.VarCardShowDef = StringVar()
+                self.VarCardShowDef.set(self.cards[number][1].get())
+                self.LblCardDef = Label(self.FmeDisplay, height=8, width=30, textvariable=self.VarCardShowDef)
+                self.LblCardDef.config(font=('Times', 32))
 
-        # Widget 6
-        self.VarStarUnstarText = StringVar()
-        self.VarStarUnstarText.set('Star')
-        self.BtnStarUnstar = Button(self.FmePage3View, textvariable=self.VarStarUnstarText, width=12, command=self.ViewStarUnstar)
-        self.BtnStarUnstar.config(font=('Times', 16))
-        self.BtnStarUnstar.grid(row=6, column=7, rowspan=1, columnspan=1)
+                # Defining a label to show the image of the card
+                try:
+                    self.ImgDirectory = StringVar()
+                    self.ImgDirectory.set(self.cards[number][2].get())
+                    # Opening the image file
+                    self.ImgTemp = Image.open(self.ImgDirectory.get())
+                    # Resizing the image
+                    self.ImgTemp = self.ImgTemp.resize((367, 275), Image.ANTIALIAS)  # (width,height)
+                    # Saving the image to a file in a format recognised by tkinter
+                    self.ImgTemp.save('ImageTempFile.gif', 'gif')
+                    # Opening the image file as a PhotoImage object
+                    self.ImgObj = PhotoImage(file='ImageTempFile.gif')
+                    # Placing the image object in a label
+                    self.LblCardImg = Label(self.FmeDisplay, image=self.ImgObj)
+                    # Setting the image method of the label to the image object
+                    self.LblCardImg.image = self.ImgObj
+                except FileExistsError or FileNotFoundError or IsADirectoryError or NotADirectoryError:
+                    messagebox.showinfo('File Error', 'Directory for this image is invalid.', icon='warning')
 
-        # Widget 7
-        self.BtnHelp = Button(self.FmePage3View, text='Help', width=12, command=self.HelpPage)
-        self.BtnHelp.config(font=('Times', 16))
-        self.BtnHelp.grid(row=9, column=7, rowspan=1, columnspan=1)
+                # Depending on what the default side is, place the correct label defined above on the grid
+                if self.VarDefaultSideInput.get() == 1:
+                    self.LblCardTerm.grid(row=1, column=1)
+                # If the default side is set to deinition show the definition for the first card
+                elif self.VarDefaultSideInput.get() == 2:
+                    self.LblCardDef.grid(row=1, column=1)
+                # If the default side is set to image show the image for the first card
+                elif self.VarDefaultSideInput.get() == 3:
+                    self.LblCardImg.grid(row=1, column=1)
 
-        # Widget 8
-        self.BtnPrevious = Button(self.FmePage3View, text='Previous', width=8, command=self.ViewPrevious)
-        self.BtnPrevious.config(font=('Times', 16))
-        self.BtnPrevious.grid(row=11, column=1, rowspan=1, columnspan=1)
 
-        # Widget 9
-        self.BtnTerm = Button(self.FmePage3View, text='Term', width=8, command=self.ViewTerm)
-        self.BtnTerm.config(font=('Times', 16))
-        self.BtnTerm.grid(row=11, column=2, rowspan=1, columnspan=1)
+                # Border around content
+                self.LblBorder1 = Label(self.FmeDisplay, height=2, width=4, bg='grey90')
+                self.LblBorder1.config(font=('Times', 16))
+                self.LblBorder1.grid(row=0, column=0)
+                self.LblBorder2 = Label(self.FmeDisplay, height=2, width=60, bg='grey90')
+                self.LblBorder2.config(font=('Times', 16))
+                self.LblBorder2.grid(row=0, column=1)
+                self.LblBorder3 = Label(self.FmeDisplay, height=2, width=4, bg='grey90')
+                self.LblBorder3.config(font=('Times', 16))
+                self.LblBorder3.grid(row=0, column=2)
+                self.LblBorder4 = Label(self.FmeDisplay, height=16, width=4, bg='grey90')
+                self.LblBorder4.config(font=('Times', 16))
+                self.LblBorder4.grid(row=1, column=0)
+                self.LblBorder5 = Label(self.FmeDisplay, height=16, width=4, bg='grey90')
+                self.LblBorder5.config(font=('Times', 16))
+                self.LblBorder5.grid(row=1, column=2)
+                self.LblBorder6 = Label(self.FmeDisplay, height=2, width=4, bg='grey90')
+                self.LblBorder6.config(font=('Times', 16))
+                self.LblBorder6.grid(row=2, column=0)
+                self.LblBorder7 = Label(self.FmeDisplay, height=2, width=60, bg='grey90')
+                self.LblBorder7.config(font=('Times', 16))
+                self.LblBorder7.grid(row=2, column=1)
+                self.LblBorder8 = Label(self.FmeDisplay, height=2, width=4, bg='grey90')
+                self.LblBorder8.config(font=('Times', 16))
+                self.LblBorder8.grid(row=2, column=2)
 
-        # Widget 10
-        self.BtnImage = Button(self.FmePage3View, text='Image', width=8, command=self.ViewImage)
-        self.BtnImage.config(font=('Times', 16))
-        self.BtnImage.grid(row=11, column=3, rowspan=1, columnspan=1)
+                # Widget 3
+                self.BtnBack = Button(self.FmePage3View, text='Back', width=24, command=self.ViewBack)
+                self.BtnBack.config(font=('Times', 16))
+                self.BtnBack.grid(row=0, column=5, rowspan=1, columnspan=3)
 
-        # Widget 11
-        self.BtnDef = Button(self.FmePage3View, text='Definition', width=8, command=self.ViewDef)
-        self.BtnDef.config(font=('Times', 16))
-        self.BtnDef.grid(row=11, column=4, rowspan=1, columnspan=1)
+                # Widget 4
+                self.LblProgressLabel = Label(self.FmePage3View, text='Progress:', width=12)
+                self.LblProgressLabel.config(font=('Times', 16))
+                self.LblProgressLabel.grid(row=2, column=7, rowspan=1, columnspan=1)
 
-        # Widget 12
-        self.BtnNext = Button(self.FmePage3View, text='Next', width=8, command=self.ViewNext)
-        self.BtnNext.config(font=('Times', 16))
-        self.BtnNext.grid(row=11, column=5, rowspan=1, columnspan=1)
+                # Widget 5                              WIP May need function to account for viewing option
+                self.VarProgress = StringVar()
+                if self.VarCardOrderInput.get() == 1:
+                    self.VarProgress.set('{0}/{1}'.format((number + 1), len(self.cards)))
+                elif self.VarCardOrderInput.get() == 2:
+                    self.VarProgress.set('{0}/{1}'.format(len(self.shownCards), len(self.cards)))
+                self.LblProgressResults = Label(self.FmePage3View, textvariable=self.VarProgress, width=12, anchor='e')
+                self.LblProgressResults.config(font=('Times', 16))
+                self.LblProgressResults.grid(row=3, column=7, rowspan=1, columnspan=1)
 
-        # Blank Spaces
-        blanks = [[1,2,3,4,5,6,7,8,9,10,11,12], [1,12], [1,12], [1,12], [1,12], [1,12], [1,2,3,4,5,6,7,8,9,10,11,12],
-                  [1,4,5,7,8,10,11,12], [0,1,2,3,4,5,6,7,8,9,10,11,12]]
-        self.countBlank = 0
-        while self.countBlank < 9:
-            for i in blanks[self.countBlank]:
-                self.LblBlank = Label(self.FmePage3View, height=1, width=8, bg='green', text='abc')
-                self.LblBlank.config(font=('Arial', 10))
-                self.LblBlank.grid(row=i, column=self.countBlank)
-            self.countBlank += 1
+                # Widget 6
+                self.VarStarUnstarText = StringVar()
+                self.VarStarUnstarText.set('Star')
+                self.BtnStarUnstar = Button(self.FmePage3View, textvariable=self.VarStarUnstarText, width=12, command=lambda *args: self.ViewStarUnstar(number))
+                self.BtnStarUnstar.config(font=('Times', 16))
+                self.BtnStarUnstar.grid(row=6, column=7, rowspan=1, columnspan=1)
 
-        self.FmePage3View.grid()
+                # Widget 7
+                self.BtnHelp = Button(self.FmePage3View, text='Help', width=12, command=self.HelpPage)
+                self.BtnHelp.config(font=('Times', 16))
+                self.BtnHelp.grid(row=9, column=7, rowspan=1, columnspan=1)
 
-    # Function to go back to ViewOverview Page      COMPLETE, Needs to rewrite listSet to save Star/Unstar Changes
+                # Widget 8
+                self.BtnPrevious = Button(self.FmePage3View, text='Previous', width=8, command=lambda *args: self.ViewPrevious(master, number))
+                self.BtnPrevious.config(font=('Times', 16))
+                self.BtnPrevious.grid(row=11, column=1, rowspan=1, columnspan=1)
+
+                # Widget 9
+                self.BtnTerm = Button(self.FmePage3View, text='Term', width=8, command=self.ViewTerm)
+                self.BtnTerm.config(font=('Times', 16))
+                self.BtnTerm.grid(row=11, column=2, rowspan=1, columnspan=1)
+
+                # Widget 10
+                self.BtnImage = Button(self.FmePage3View, text='Image', width=8, command=self.ViewImage)
+                self.BtnImage.config(font=('Times', 16))
+                self.BtnImage.grid(row=11, column=3, rowspan=1, columnspan=1)
+
+                # Widget 11
+                self.BtnDef = Button(self.FmePage3View, text='Definition', width=8, command=self.ViewDef)
+                self.BtnDef.config(font=('Times', 16))
+                self.BtnDef.grid(row=11, column=4, rowspan=1, columnspan=1)
+
+                # Widget 12
+                self.BtnNext = Button(self.FmePage3View, text='Next', width=8, command=lambda *args: self.ViewNext(master, number))
+                self.BtnNext.config(font=('Times', 16))
+                self.BtnNext.grid(row=11, column=5, rowspan=1, columnspan=1)
+
+                # Blank Spaces
+                blanks = [[1,2,3,4,5,6,7,8,9,10,11,12], [1,12], [1,12], [1,12], [1,12], [1,12], [1,2,3,4,5,6,7,8,9,10,11,12],
+                          [1,4,5,7,8,10,11,12], [0,1,2,3,4,5,6,7,8,9,10,11,12]]
+                self.countBlank = 0
+                while self.countBlank < 9:
+                    for i in blanks[self.countBlank]:
+                        self.LblBlank = Label(self.FmePage3View, height=1, width=8)#, bg='green', text='abc')
+                        self.LblBlank.config(font=('Arial', 10))
+                        self.LblBlank.grid(row=i, column=self.countBlank)
+                    self.countBlank += 1
+
+                self.FmePage3View.grid()
+
+            # If view full fav is set the fav and the current card is not a favourite then skip to the next card
+            else:
+                print('ViewFullFav else triggered')
+                number += 1
+                self.ViewPage(master, number)
+
+        # If there are no more cards inform the user and exit view page.
+        else:
+            print('All cards shown')
+            messagebox.showinfo('Finished', 'All cards have been shown\nReturning to start-up screen.')
+            self.ViewBack()
+
+    # Function to go back to ViewOverview Page      COMPLETE
     def ViewBack(self):
+
+        # Rewriting self.cards as a list of strings
+        self.cardsStrings = []
+        for i in self.cards:
+            self.cardsStringsSub = []
+            self.cardsStringsSub.append(i[0].get())
+            self.cardsStringsSub.append(i[1].get())
+            self.cardsStringsSub.append(i[2].get())
+            self.cardsStringsSub.append(i[3].get())
+            self.cardsStrings.append(self.cardsStringsSub)
+
+        # Rewriting listSet
+        SaveSet(self.currentSetName.get(), self.currentSetFile.get(), self.cardsStrings)
+
         self.FmePage3View.grid_remove()
         self.ViewOverviewPage(self.master)
 
-    # Function to Star/Unstar a card                WIP
-    def ViewStarUnstar(self):
+    # Function to Star/Unstar a card                COMPLETE
+    def ViewStarUnstar(self, number):
         print('ViewStarUnstar')
+        # If the card is not starred
+        if self.cards[number][3].get() == 'no':
+            # Star the card
+            self.cards[number][3].set('yes')
+            # Inform the user
+            messagebox.showinfo('Star and Unstar', ' The card has been starred.')
+        # If the card is starred
+        elif self.cards[number][3].get() == 'yes':
+            # Unstar the card
+            self.cards[number][3].set('no')
+            # Inform the user
+            messagebox.showinfo('Star and Unstar',' The card has been un-starred.')
 
-    # Function to go to the previous card           WIP
-    def ViewPrevious(self):
-        print('ViewPrevious')
+    # Function to go to the previous card           COMPLETE
+    def ViewPrevious(self, master, number):
+        print('\nViewPrevious')
+        if self.VarCardOrderInput.get() == 1:
+            # Decreases the card counter by one
+            number -= 1
+
+            # If  viewFullStar is set to star the change back cards until a starred card is reached or there are no more cards
+            if self.VarViewFullStarInput.get() == 2:
+                while self.cards[number][3].get() == 'no':
+                    number -= 1
+            # If there are no more cards then inform the user
+            if number < 0:
+                messagebox.showinfo('No More Cards', 'There are no previous cards to go back to.')
+                return
+        elif self.VarCardOrderInput.get() == 2:
+            # If only one card has been shown then the previous card is the first card
+            if len(self.shownCards) == 1:
+                x = self.shownCards[0]
+            else:
+                # Reverses the list of the shown cards into a new list using function from FunctionsCLI
+                self.shownCardsReversed = self.shownCards.copy()
+                self.shownCardsReversed.reverse()
+
+                try:
+                    x = self.shownCardsReversed[self.cycles]
+                    number = x
+                except IndexError:
+                    # If the first card shown is the current card then the current card is the number
+                     # of cards in the list which triggers an exit out of the function
+                    number = len(self.cards)
+
+                self.cycles += 1
+
+        # Re-run the view window with the new card
+        self.FmePage3View.grid_remove()
+        self.ViewPage(master, number)
 
     # Function to show the term                    COMPLETE
     def ViewTerm(self):
         print('ViewTerm')
+        # Remove the currently shown definition or image
+        # Try blocks are to catch the error that ocurs if the card is not showing the definition or the image
         try:
             self.LblCardDef.grid_remove()
         except AttributeError:
@@ -1029,12 +1113,14 @@ class GUI:
             self.LblCardImg.grid_remove()
         except AttributeError:
             print('self.LblCardImg: Attribute Error')
-
+        # Place the term label in the grid
         self.LblCardTerm.grid(row=1,column=1)
 
     # Function to show the image                   COMPLETE
     def ViewImage(self):
         print('ViewImage')
+        # Remove the currently shown term or definition
+        # Try blocks are to catch the error that ocurs if the card is not showing the term or the definition
         try:
             self.LblCardTerm.grid_remove()
         except AttributeError:                         
@@ -1043,12 +1129,14 @@ class GUI:
             self.LblCardDef.grid_remove()
         except AttributeError:
             print('self.LblCardDef: Attribute Error')
-
+        # Place the image label in the grid
         self.LblCardImg.grid(row=1,column=1)
 
     # Function to show the definition              COMPLETE
     def ViewDef(self):
         print('ViewDefinition')
+        # Remove the currently shown term or image
+        # Try blocks are to catch the error that ocurs if the card is not showing the term or the image
         try:
             self.LblCardTerm.grid_remove()
         except AttributeError:
@@ -1057,15 +1145,33 @@ class GUI:
             self.LblCardImg.grid_remove()
         except AttributeError:
             print('self.LblCardImg: Attribute Error')
-
+        # Place the definition label in the grid
         self.LblCardDef.grid(row=1,column=1)
 
-
-    # Function to go to the next card               WIP
-    def ViewNext(self):
+    # Function to go to the next card               COMPLETE
+    def ViewNext(self, master, number):
         print('ViewNext')
-        
+        # If the card order is set to Original
+        if self.VarCardOrderInput.get() == 1:
+            # Continue to the next card
+            number += 1
+        elif self.VarCardOrderInput.get() == 2:
+            # Rewriting self.cards as a list of strings
+            self.cardsStrings = []
+            for i in self.cards:
+                self.cardsStringsSub = []
+                self.cardsStringsSub.append(i[0].get())
+                self.cardsStringsSub.append(i[1].get())
+                self.cardsStringsSub.append(i[2].get())
+                self.cardsStringsSub.append(i[3].get())
+                self.cardsStrings.append(self.cardsStringsSub)
+            # Calling RndCardOrder function from FunctionsCLI to change to the next card in a randomised order
+            number = RndCardOrder(number, self.cardsStrings, self.shownCards)
+        # Remove the frame and rerun the Page function
+        self.FmePage3View.grid_remove()
+        self.ViewPage(master, number)
 
+        
     # Function for the Help Page                    Needs Text
     def HelpPage(self):
         # Contains a sub function
