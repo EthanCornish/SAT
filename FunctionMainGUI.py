@@ -23,6 +23,7 @@ class GUI:
         self.ViewOverviewPage(self.master)
 
     # Function for the ViewOverview Page            PAGE FUNCTION
+    # master argument is the root window
     def ViewOverviewPage(self, master):
 
         # Define variables to store the name and the file of the current set
@@ -252,7 +253,7 @@ class GUI:
 
         # Creating the frame to store the table in as a sub frame of the scroll bar sub frame (that's a sub, sub frame)
         #   this is done as the scroll bar was implemented after the creation of the function and the frame was already established.
-        # This frame also stoes the view (static) version of the table, another frame stores the edit (active) version of the table
+        # This frame also stores the view (static) version of the table, another frame stores the edit (active) version of the table
         self.FmeTableView = Frame(self.FmeSbSub)
 
         # Creating the label for the header for the term column of the view table, setting the font and size, placing it in the grid
@@ -383,7 +384,7 @@ class GUI:
         self.count = 0
         # Defining a list to store the cards after they are edited. Will be a list of lists
         self.LstEditCards = []
-        # Loop that goes interates through every row in the table for the amount of cards
+        # Loop that goes iterates through every row in the table for the amount of cards
         for i in range(2, self.noCards):
             # Creating a sub list to make adding to the above list easier
             self.LstEditCardsSub = []
@@ -418,8 +419,8 @@ class GUI:
                 self.VarCurrentImg.set(self.cards[self.count][2].get())
                 # Define a stringVar to store the string version of the current definition to be set as the default text in the entry field
                 self.EntImg = Entry(self.FmeTableEdit, textvariable=self.VarCurrentImg, width=12)
-                self.LstEditCardsSub.append(self.VarCurrentImg)
                 # Adding the text to the sub list in a StringVar format
+                self.LstEditCardsSub.append(self.VarCurrentImg)
                 self.EntImg.config(font=('Times', 14))
                 self.EntImg.grid(row=i, column=5)
 
@@ -491,7 +492,7 @@ class GUI:
         self.ViewOverviewTable(listSet)
 
     # Function for the ViewOverview Page to change to table from label to entry
-    #                                               Comments
+    #                                               COMPLETE
     def ViewOverviewEditSaveBtn(self):
         # Define status variable to store if the table is currently showing the view or edit version
         status = self.varEditSaveBtnInt.get()
@@ -561,7 +562,7 @@ class GUI:
         # Set the status intVar to the status integer variable
         self.varEditSaveBtnInt.set(status)
 
-    # Function to delete the current set            Comments
+    # Function to delete the current set            COMPLETE
     # listSetName argument is listSetName from the design
     def ViewOverviewDelete(self, listSetName):
         # Uses an askyesno message box to recive confirmation from the user about deleting the set
@@ -587,79 +588,104 @@ class GUI:
 
 
     # Function for the Create Page                  PAGE FUNCTION
+    # master argument is the root window
     def CreatePage(self, master):
-        # Removing the frame containing ViewOverviewPage
+        # Remove the frame containing ViewOverviewPage
         self.FmePage1ViewOverview.grid_remove()
 
-        # Creating the frame to store the contents of Create Page grid line at bottom of function
+        # Creating the frame to store the contents of the Create Page
         self.FmePage2CreateSet = Frame(master)
 
-        # Widget 1
+        # Creating a variable to store the name of the set.
         self.VarName = StringVar()
+        # Setting the default text to act as an existance check and an instruction
         self.VarName.set('Enter Name of Set')
+        # Creating the entry field to enter the name of the set, setting the font, size, colour and placing it in the grid
         self.EntName = Entry(self.FmePage2CreateSet, textvariable=self.VarName, width=24, bg='Orange')
         self.EntName.config(font=('Arail', 32, 'bold underline'))
         self.EntName.grid(row=0,column=0,rowspan=2,columnspan=4)
 
-        # Widget 4:     Add row to bottom of table
+        # Creating the button to add another row to the table, setting the font and placing it in the grid.
+        # Command calls the the function to add or remove a row.
+        # The self.varTableRowSpan argument is the amount of rows currently in the table.
+        # The 0 tells the function to add a row as the function can add and remove rows
         self.BtnAddRow = Button(self.FmePage2CreateSet, text='Add Row', width=16, command=lambda *args: self.CreateChangeRow(self.VarTableRowSpan, 0))
         self.BtnAddRow.config(font=('Times', 16))
         self.BtnAddRow.grid(row=4, column=5, rowspan=1, columnspan=1)
 
-        # Widget 5:     Remove row from bottom of tabxle
+        # Creating the button to remove a row to the table, setting the font and placing it in the grid.
+        # Command calls the the function to add or remove a row.
+        # The self.varTableRowSpan argument is the amount of rows currently in the table.
+        # The 1 tells the function to remove a row as the function can add and remove rows
         self.BtnRemoveRow = Button(self.FmePage2CreateSet, text='Remove Row', width=16, command=lambda *args: self.CreateChangeRow(self.VarTableRowSpan, 1))
         self.BtnRemoveRow.config(font=('Times', 16))
         self.BtnRemoveRow.grid(row=6, column=5, rowspan=1, columnspan=1)
 
-        # Widget 2
-        # Variable to determine the number of rows in the table. Can be changed with buttons
-        # VarTableRowSpan = (number of cards * 2) + 3
-        # Num cards = 9
+        # Variable to determine the number of rows in the table. And the rowspan of the table.  Can be changed with buttons
+        # VarTableRowSpan = (number of cards * 2) + 3, 15 is the default amount of rows
         self.VarTableRowSpan = IntVar()
-        self.VarTableRowSpan = (17 * 2) + 3
+        self.VarTableRowSpan = (15 * 2) + 3
+        # LstCardsCreate is a list of lists that will contain the entered data
         self.LstCardsCreate = []
+        # Calling the function to create the table
         self.CreateTable()
 
-        # Widget 3
+        # Creating the button to save the set that has been created and return to the ViewOverview Page, setting the font and placing it in the grid
+        # Command calls the corresponding function
         self.BtnSave = Button(self.FmePage2CreateSet, text='Save Set', width=16, command=self.CreateSave)
         self.BtnSave.config(font=('Times', 16))
         self.BtnSave.grid(row=1, column=5, rowspan=1, columnspan=1)
 
-        # Widget 5
+        # Creating the button to exit the Create page without saving the set, setting the font and placing it in the grid
+        # Command calls the corresponding function
         self.BtnDelete = Button(self.FmePage2CreateSet, text='Cancel Set Creation', width=16, command=self.CreateDelete)
         self.BtnDelete.config(font=('Times', 16))
         self.BtnDelete.grid(row=8, column=5, rowspan=1, columnspan=1)
 
-        # Widget 6
+        # Creating the button to call the import set sub window and function, setting the font and placing it in the grid
+        # Command calls the corresponding function which creates the sub window and its functionality
         self.BtnImport = Button(self.FmePage2CreateSet, text='Import Set', width=16, command=self.CreateImport)
         self.BtnImport.config(font=('Times', 16))
         self.BtnImport.grid(row=10, column=5, rowspan=1, columnspan=1)
 
-        # Widget 7
+        # Creating the button to call the help sub window, setting the font and placing it in the grid
+        # Command calls the help function
         self.BtnHelp = Button(self.FmePage2CreateSet, text='Help', width=16, command=self.HelpPage)
         self.BtnHelp.config(font=('Times', 16))
         self.BtnHelp.grid(row=12, column=5, rowspan=1, columnspan=1)
 
-        # Blank Spaces
+        # Creating the blank spaces used to format the top frame
+
+        # List of lists stores where the blank spaces need to go. Each sublist is a column and the items in the sublist are the rows for the column
         blanks = [[2,3,4,5,6,7,8,9], [2], [2], [2], [0,1,2,3,4,5,6,7,8,9,11], [0,3,5,7,9,11], [0,3,5,7,9,11]]
+        # Defining a counting variable to store the index value of the current sublist
         self.countBlank = 0
+        # Goes through each sublist in self.lstBlanks
         while self.countBlank < 7:
+            # Goes through each item in the sublist
             for i in blanks[self.countBlank]:
+                # Creates a label with no text of specific size
                 self.LblBlank = Label(self.FmePage2CreateSet, height=1, width=8)
                 self.LblBlank.config(font=('Arial', 10))
-                # self.LblBlank = Label(self.FmePage1ViewOverview, height=1, width=8)
+                # Placing the label in the grid at column, sublist and row, index of sublist
                 self.LblBlank.grid(row=i, column=self.countBlank)
+            # Increments the counting variable
             self.countBlank += 1
 
+        # Places the top frame on the grid
         self.FmePage2CreateSet.grid(row=0,column=0)
 
-    # Function to create the table                  PAGE CHILD FUNCTION
+    # Function to create the table in Create Page   PAGE CHILD FUNCTION
     def CreateTable(self):
 
-        # Creating List
+        # Creating List of StringVars with default values that act as an existance check and an instruction
+        # Define a counting variable to store the number of the card
         self.count = 0
+        # Checks that the list is empty and therefore has just been created in the CreatePage function
+        # Otherwise everything the function is called the list will reset
         if len(self.LstCardsCreate) < 1:
-            while self.count < 24:
+            while self.count < 15:
+                # Default text takes the form of the a string and the counter variable
                 self.VarCardT = StringVar()
                 self.VarCardT.set(('Enter Term ' + str(self.count)))
 
@@ -672,134 +698,166 @@ class GUI:
                 self.LstCardsCreate.append([self.VarCardT, self.VarCardD, self.VarCardI])
                 self.count += 1
 
-        # Creating the scroll bar through a frame in a canvas in a frame
+        # Creating the scroll bar by placing the table in a frame in a canvas in a frame
+        # Function to configure the canvas
         def CanvasConfig(event):
             self.canvas.configure(scrollregion=self.canvas.bbox("all"), width=490, height=600)
+        # Creating the top frame for the scroll bar and placing it in the grid.
         self.FmeSbTop = Frame(self.FmePage2CreateSet)
         self.FmeSbTop.grid(row=3, column=1, rowspan=self.VarTableRowSpan, columnspan=3)
+        # Creating a canvas top put in the top frame, setting it's size and placing it in the frame
         self.canvas = Canvas(self.FmeSbTop)
+        # Creating the sub frame for the scroll bar and setting it's size.
         self.FmeSbSub = Frame(self.canvas, width=100, height=600)
+        # Creating the scrollbar and making it vertical
         self.ScrollBar = Scrollbar(self.FmeSbTop, orient='vertical', command=self.canvas.yview)
+        # Adding the scroll bar to the canvas
         self.canvas.configure(yscrollcommand=self.ScrollBar.set)
         self.ScrollBar.pack(side='right', fill='y')
         self.canvas.pack(side='left')
+        # Setting the sub frame inside the frame
         self.canvas.create_window((0, 0), window=self.FmeSbSub, anchor='nw')
         self.FmeSbSub.bind('<Configure>', CanvasConfig)
 
-        # Frame to contain table
+        # Creating the frame to store the table in as a sub frame of the scroll bar sub frame (that's a sub, sub frame)
+        #   this is done as the scroll bar was implemented after the creation of the function and the frame was already established.
         self.FmeTableCreate = Frame(self.FmeSbSub)
+        # Placing the grid in the frame
         self.FmeTableCreate.grid(row=3, column=1, rowspan=self.VarTableRowSpan, columnspan=3)
 
 
-        # Header for 'Term' Column
+        # Creating the label for the header for the term column of the table, setting the font and size, placing it in the grid
         self.LblTermHeader = Label(self.FmeTableCreate, text='Term', width=12, height=1)
         self.LblTermHeader.config(font=('Times', 18, 'underline'))
         self.LblTermHeader.grid(row=1, column=1)
 
-        # Header for 'Definition' Column
+        # Creating the label for the header for the definition column of the table, setting the font and size, placing it in the grid
         self.LblDefHeader = Label(self.FmeTableCreate, text='Definition', width=22, height=1)
         self.LblDefHeader.config(font=('Times', 18, 'underline'))
         self.LblDefHeader.grid(row=1, column=3)
 
-        # Header for 'Image' Column
+        # Creating the label for the header for the image directory column of the table, setting the font and size, placing it in the grid
         self.LblImgHeader = Label(self.FmeTableCreate, text='Image Directory', width=12, height=1)
         self.LblImgHeader.config(font=('Times', 17, 'underline'))
         self.LblImgHeader.grid(row=1, column=5)
 
 
-        # Setting Entry Fields
+        # Creating the entry fields in the table
 
-        # Setting the content for the 'Term' Column
         self.count = 0
+        # Loop that iterates through every row in the table
         for i in range(2, self.VarTableRowSpan):
+            # Creating a sub list to make adding to the above list easier
             self.LstCardsSub =[]
             if (i % 2) == 1:
                 # Setting the content for the 'Term' Column
+                # Define a stringVar to store the string version of the current term to be set as the default text in the entry field
                 self.VarCurrentTerm = StringVar()
                 self.VarCurrentTerm.set(self.LstCardsCreate[self.count][0].get())
+                # Creating an entry field, setting the font, placing in the grid
                 self.EntTerm = Entry(self.FmeTableCreate, textvariable=self.VarCurrentTerm, width=12)
+                # Adding the text to the sub list in a StringVar format
                 self.LstCardsSub.append(self.VarCurrentTerm)
                 self.EntTerm.config(font=('Times', 16))
                 self.EntTerm.grid(row=i, column=1)
 
                 # Setting the content for the 'Definition' Column
+                # Define a stringVar to store the string version of the current term to be set as the default text in the entry field
                 self.VarCurrentDef = StringVar()
                 self.VarCurrentDef.set(self.LstCardsCreate[self.count][1].get())
+                # Define a stringVar to store the string version of the current definition to be set as the default text in the entry field
                 self.EntDef = Entry(self.FmeTableCreate, textvariable=self.VarCurrentDef, width=22)
+                # Adding the text to the sub list in a StringVar format
                 self.LstCardsSub.append(self.VarCurrentDef)
                 self.EntDef.config(font=('Times', 16))
                 self.EntDef.grid(row=i, column=3)
 
                 # Setting the content for the 'Image' Column
+                # Define a stringVar to store the string version of the current term to be set as the default text in the entry field
                 self.VarCurrentImg = StringVar()
                 self.VarCurrentImg.set(self.LstCardsCreate[self.count][2].get())
+                # Define a stringVar to store the string version of the current definition to be set as the default text in the entry field
                 self.EntImg = Entry(self.FmeTableCreate, textvariable=self.VarCurrentImg, width=12)
+                # Adding the text to the sub list in a StringVar format
                 self.LstCardsSub.append(self.VarCurrentImg)
                 self.EntImg.config(font=('Times', 16))
                 self.EntImg.grid(row=i, column=5)
 
-                self.count += 1
+                # Adding the sublist to the new list
                 self.LstCardsCreate.append(self.LstCardsSub)
+                self.count += 1
 
-        # Border
+        # Setting border around the table
+        # The label contains no text and is uses a standard colour.
+        # The size depends on where the border label is
+        # Creating a list to store the cells that have a border label
         self.border = []
+        # Loop that iterates for the amount of rows
         for i in range(0, self.VarTableRowSpan):
+            # Loop that iterates through every column (there are always seven columns)
             for j in range(0, 7):
-                # Even row and column = 0, 2, 4, 6 (even)
+                # On even rows and even columns place a label
                 if (i % 2) == 0 and (j % 2) == 0:
                     self.LblBorder = Label(self.FmeTableCreate, width=1, height=1, bg='grey')
                     self.LblBorder.grid(row=i, column=j)
                     self.border.append(self.LblBorder)
-                # Even row and column = 1 (term)
+                # On even rows and the first column place a label of the same width as the term labels
                 elif (i % 2) == 0 and j == 1:
                     self.LblBorder = Label(self.FmeTableCreate, width=12, height=1, bg='grey')
                     self.LblBorder.grid(row=i, column=j)
                     self.border.append(self.LblBorder)
-                # Even row and column = 3 (def)
+                # On even rows and the third column place a label of the same width as the definition labels
                 elif (i % 2) == 0 and j == 3:
                     self.LblBorder = Label(self.FmeTableCreate, width=22, height=1, bg='grey')
                     self.LblBorder.grid(row=i, column=j)
                     self.border.append(self.LblBorder)
-                # Even row and column = 1 (img)
+                # On even rows and the fifth column place a label of the same width as the image directory labels
                 elif (i % 2) == 0 and j == 5:
                     self.LblBorder = Label(self.FmeTableCreate, width=12, height=1, bg='grey')
                     self.LblBorder.grid(row=i, column=j)
                     self.border.append(self.LblBorder)
+                # On even rows and odd column and not the first row place a label as high as the text labels
                 elif (i % 2) == 1 and (j % 2) == 0 and i != 1:
                     self.LblBorder = Label(self.FmeTableCreate, width=1, height=3, bg='grey')
                     self.LblBorder.grid(row=i, column=j)
                     self.border.append(self.LblBorder)
+                # On the first row and odd column and place a label as high as the header labels
                 elif (i % 2) == 1 and (j % 2) == 0:
                     self.LblBorder = Label(self.FmeTableCreate, width=1, height=2, bg='grey')
                     self.LblBorder.grid(row=i, column=j)
                     self.border.append(self.LblBorder)
 
     # Function to save the set that has just been made and change the screen back to ViewOverview
-    #                                               Comments
+    #                                               COMPLETE
     def CreateSave(self):
-            self.LstNew = []
+            # Reading the table list in to a list of lists of strings
+            self.lstCardsCreateString = []
             for i in self.LstCardsCreate:
                 self.LstNewSub = []
                 for j in i:
                     x = j.get()
+                    # If there is a blank space in the table inform the user with a showinfo message box and exit the function
                     if x != '':
                         self.LstNewSub.append(x)
                     else:
                         messagebox.showinfo('Saving', 'Set could not saved as there was a blank space.')
                         return
-                self.LstNew.append(self.LstNewSub)
+                self.lstCardsCreateString.append(self.LstNewSub)
 
-            for i in self.LstNew:
+            # Go through each sublist in the string list and add, 'no' as the default View Full/Star value
+            for i in self.lstCardsCreateString:
                 i.append('no')
-            # Output is listCards from design and is ready to be merged with CLI
+
+            # String liss is now is listCards from design and is ready to be merged with CLI
 
             # Crete the name of the file to be stored in using the format, file_setName
             self.setFile = ('file_'+str(self.EntName.get()))
 
-            # Write the set to a file using SaveSet function
-            SaveSet(self.EntName.get(), self.setFile, self.LstNew)
+            # Write the set to a file using SaveSet function in FunctionsCLI
+            # self.EntName.get() is the string from the entry field on the page.
+            SaveSet(self.EntName.get(), self.setFile, self.lstCardsCreateString)
 
-            # Adding the set to listSetName
+            # Adding the set to listSetName and informing the user with a showinfo messagebox
             listSetName.append([self.EntName.get(), self.setFile])
             messagebox.showinfo('Saving', 'Set Saved Successfully.')
 
@@ -809,11 +867,10 @@ class GUI:
             self.ViewOverviewPage(self.master)
 
     # Function to change the amount of rows in the table      COMPLETE
+    # numRow argument is the amount of rows in the table
+    # change argument is if the function needs to add a row or remove a row
     def CreateChangeRow(self, numRow, change):
-        print('Change Row Function Ran')
         # Does so by incrementing the variable by +2 (+2 because there needs to be a border row)
-        # WIP can't get the change to carry through to Create function
-        print('\nchange =', change)
         # If the function ran from the 'Add Row' Button, increase the row variable
         if change == 0:
             numRow += 2
@@ -821,7 +878,7 @@ class GUI:
         elif change == 1:
             numRow -= 2
 
-        # Reading the table to rewrite it into the file
+        # Reading the table to a list of strings
         self.LstNew = []
         for i in self.LstCardsCreate:
             self.LstNewSub = []
@@ -830,6 +887,7 @@ class GUI:
                 self.LstNewSub.append(x)
             self.LstNew.append(self.LstNewSub)
 
+        # Taking the list of strings and writing it to a list of StringVars
         self.LstNew2 = []
         for i in self.LstNew:
             self.LstNew2Sub = []
@@ -840,91 +898,146 @@ class GUI:
             self.LstNew2.append(self.LstNew2Sub)
         self.cards = self.LstNew2
 
+        # Making sure the row number variable is an integer
         numRow = int(numRow)
+        # Setting the self variable to the variable that was changed inside the function
         self.VarTableRowSpan = numRow
+        # Recalling the table creation function
         self.CreateTable()
 
-    # Function to delete the set being made         Comments
+    # Function to delete the set being made         COMPLETE
+    # Button reads 'Cancel Set Creation'
     def CreateDelete(self):
+        # Create a variable to store the text that will be shown in the user notification to make the next line easier to read
         self.message = 'Are you sure you want to cancel set creation?\nThis will return you to the Start-up screen and ' \
                        'progress will be lost.\nThis can not be undone.'
-        self.VarContinue = messagebox.askokcancel(title='Cancel', message=self.message, )
+        # Message box asking for confirmation
+        self.VarContinue = messagebox.askokcancel(title='Cancel', message=self.message)
+        # If the user confirms their choice
         if self.VarContinue:
+            # Remove the Create Page and Call the ViewOverview Page Function
             self.FmePage2CreateSet.grid_remove()
             self.ViewOverviewPage(self.master)
             return
 
-    # Function to import a set                      Comments
+    # Function to import a set                      COMPLETE
+    # Has a sub window and a function for the functionality which calls a function in FunctionsCLI
     def CreateImport(self):
+
+        # Variable to run the while loop, is made false at the end. Done to make it easier to condense the program
         self.ImportPageContents = True
+        # While loop contains the code to create and place the widgets in the sub window
         while self.ImportPageContents:
+            # Define, create and name a sub window
             self.WinImport = Toplevel(root)
             self.WinImport.title('Import')
 
+            # Create a frame to place everything in. Place the frame in the sub window
             self.FmeImportPage = Frame(self.WinImport)
             self.FmeImportPage.grid()
 
+            # Create a title lable, setting the colour size and font, place in grid
             self.LblImTitle = Label(self.FmeImportPage, text='Import Set', bg='Orange', width=30, height=1)
             self.LblImTitle.config(font=('Arail', 28, 'underline'))
             self.LblImTitle.grid(row=0,column=0,rowspan=1,columnspan=2)
 
+            # Create the label to accompany the entry field that gets the name of the set to be imported
             self.LblImSetName = Label(self.FmeImportPage, text='Name of Set:')
+            # Set the font for the label and place in the grid
             self.LblImSetName.config(font=('Times', 16))
             self.LblImSetName.grid(row=1, column=0, rowspan=1, columnspan=1)
 
+            # Define variable to store the input from the entry field as a StringVar
             self.VarImSetName = StringVar()
+            # Provide a default value into the entry field to act as an existence check and an instruction
             self.VarImSetName.set('Enter Name Here')
+            # Create the entry field to get the name of the set being imported, set the font, place in the grid
             self.EntImSetName = Entry(self.FmeImportPage, textvariable=self.VarImSetName, width=20)
             self.EntImSetName.config(font=('Times', 16))
             self.EntImSetName.grid(row=1, column=1, rowspan=1, columnspan=1)
 
+            # Create a label to accompany the entry field that gets the file directory, set the font and place in the grid
             self.LblImPrompt = Label(self.FmeImportPage, text='Directory of Import File:')
             self.LblImPrompt.config(font=('Times', 16))
             self.LblImPrompt.grid(row=2,column=0,rowspan=1,columnspan=1)
 
+            # Define a variable as a StringVar to store the input from the entry
             self.VarImDirectory = StringVar()
+            # Provide a default value into the entry field to act as an existence check
+            self.VarImDirectory.set('Enter Directory Here')
+            # Create the entry field to get the directory of the file to be imported, set the font and place in the grid
             self.EntImDir = Entry(self.FmeImportPage, textvariable=self.VarImDirectory, width=20)
             self.EntImDir.config(font=('Times', 16))
             self.EntImDir.grid(row=2,column=1,rowspan=1,columnspan=1)
 
-            self.BtnImImport = Button(self.FmeImportPage, text='Import File', width=40, command=lambda *args: ImImport(self, self.VarImDirectory.get(), self.VarImSetName.get()))
+            # Create a button to call the sub function of this function that imports the set. Set the font, place in grid
+            # Command calls the sub function
+            # The self.VarImDirectory.get() argument is the string of the directory entered into the entry
+            # The self.varImSetName.get() argument is the string of the name entered into the entry
+            self.BtnImImport = Button(self.FmeImportPage, text='Import File', width=40,
+                            command=lambda *args: ImImport(self, self.VarImDirectory.get(), self.VarImSetName.get()))
             self.BtnImImport.config(font=('Times', 16))
             self.BtnImImport.grid(row=3,column=0,rowspan=1,columnspan=2)
 
+            # Define a StringVar to store a short set of instructions
+            # Instructions are stored here instead of the widget creation line for readability of the code
             self.VarImTxt = StringVar()
             self.VarImTxt.set('Imported sets must be a CSV (Comma Separated Value) file in the following form;\n'
                      'term,definition,img_directory\nterm,definition,img_directory\n... , ... , ...\nWhere each line '
-                     'represents a different card.')
+                     'represents a different card.\nExample Directory: /Users/19ecornish/Downloads/set.csv\nAfter a '
+                              'successful import you will be returned to the start-up screen.')
+            # Create a label to provide some basic instructions. Set the font and place in the grid
             self.LblImTxt = Label(self.FmeImportPage, textvariable=self.VarImTxt, anchor=NW)
             self.LblImTxt.config(font=('Times', 16))
             self.LblImTxt.grid(row=4,column=0,rowspan=1,columnspan=2)
 
+            # Create a button to exit the importing and close the sub window, set the font and place in the grid
+            # Command destroy's the sub window which consequentially exits the function
             self.BtnImExit = Button(self.FmeImportPage, text='Cancel Import', command=self.WinImport.destroy)
             self.BtnImExit.config(font=('Times', 16))
             self.BtnImExit.grid(row=5,column=1,rowspan=1,columnspan=1)
 
+            # Create a blank label of set size to assist in the positioning of the exit button
             self.LblBlank = Label(self.FmeImportPage, width=14, height=1)
             self.LblBlank.grid(row=5, column=0,rowspan=1,columnspan=1)
 
+            # Set the while loop variable to false so that the while loop only runs once
             self.ImportPageContents = False
 
-        # Function to be merged with CLI
+        # Function to import the set using input gathered in the while loop.
+        # directory argument is the directory gathered from the entry
+        # setName argument is the name from the entry
+        # Both arguments are strings
         def ImImport(self, directory, setName):
+            # Create the name of the file for the set using the format used when creating a set
             setFile = ('file_' + str(setName))
 
+            # Call the ImportSet function from FunctionsCLI which reads the given file and writes it to a file made
+            #       by the program
+            # listSetName argument is listSetName from the design
+            # directory and setName arguments is the same as the argument from this function
+            # setFile argument is the variable that was just created and is a string
+            # Function returns a boolean value. If true the file was read successfully
+            #       If false then there was an error reading the file
             self.check = ImportSet(listSetName, directory, setName, setFile)
+            # If the import was successful
             if self.check:
+                # Add the set to listSetName
                 listSetName.append([setName, setFile])
+                # Inform the user that the import was successful with a messagebox
                 messagebox.showinfo('Import', 'Import Successful\nReturning to start-up screen')
 
-                # Closing the import window
+                # Close the sub window
                 self.WinImport.destroy()
                 # Removing the frame containing everything from the create page
                 self.FmePage2CreateSet.grid_remove()
                 # Returning to the ViewOverview Screen
                 self.ViewOverviewPage(self.master)
+            # If the import was not successful
             elif not self.check:
+                # Inform the user and provide some quick suggestions on what to check
                 messagebox.showinfo('Import', 'Import Unsuccessful\nCheck the directory, file type and the import format.')
+                # Exit the function
                 return
 
     # Function for the View Page                    PAGE FUNCTION
@@ -950,8 +1063,6 @@ class GUI:
 
 
                 # Can show text 8 lines high and 30 characters wide
-                print('number =', number)
-
 
                 # Defining a label to show the term of the card
                 self.VarCardShowTerm = StringVar()
@@ -1093,13 +1204,11 @@ class GUI:
 
             # If view full fav is set the fav and the current card is not a favourite then skip to the next card
             else:
-                print('ViewFullFav else triggered')
                 number += 1
                 self.ViewPage(master, number)
 
         # If there are no more cards inform the user and exit view page.
         else:
-            print('All cards shown')
             messagebox.showinfo('Finished', 'All cards have been shown\nReturning to start-up screen.')
             self.ViewBack()
 
@@ -1124,7 +1233,6 @@ class GUI:
 
     # Function to Star/Unstar a card                COMPLETE
     def ViewStarUnstar(self, number):
-        print('ViewStarUnstar')
         # If the card is not starred
         if self.cards[number][3].get() == 'no':
             # Star the card
@@ -1140,7 +1248,6 @@ class GUI:
 
     # Function to go to the previous card           COMPLETE
     def ViewPrevious(self, master, number):
-        print('\nViewPrevious')
         if self.VarCardOrderInput.get() == 1:
             # Decreases the card counter by one
             number -= 1
@@ -1178,7 +1285,6 @@ class GUI:
 
     # Function to show the term                    COMPLETE
     def ViewTerm(self):
-        print('ViewTerm')
         # Remove the currently shown definition or image
         # Try blocks are to catch the error that ocurs if the card is not showing the definition or the image
         try:
@@ -1194,7 +1300,6 @@ class GUI:
 
     # Function to show the image                   COMPLETE
     def ViewImage(self):
-        print('ViewImage')
         # Remove the currently shown term or definition
         # Try blocks are to catch the error that ocurs if the card is not showing the term or the definition
         try:
@@ -1210,7 +1315,6 @@ class GUI:
 
     # Function to show the definition              COMPLETE
     def ViewDef(self):
-        print('ViewDefinition')
         # Remove the currently shown term or image
         # Try blocks are to catch the error that ocurs if the card is not showing the term or the image
         try:
@@ -1226,7 +1330,6 @@ class GUI:
 
     # Function to go to the next card               COMPLETE
     def ViewNext(self, master, number):
-        print('ViewNext')
         # If the card order is set to Original
         if self.VarCardOrderInput.get() == 1:
             # Continue to the next card
@@ -1374,10 +1477,6 @@ currentSetFileString = listSetName[-1][1]
 
 listSet = ListSetCreate(currentSetFileString)
 
-print('listSetName =', listSetName)
-print('currentSetNameString =', currentSetNameString)
-print('currentSetFileString =', currentSetFileString)
-print('listSet =', listSet)
 
 # Calls the GUI
 GUI = GUI(root)
@@ -1392,5 +1491,3 @@ for set in listSetName:
     fileListSetName.write(set[1])
     fileListSetName.write('\n')
 fileListSetName.close()
-
-print('SAVED listSetName =', listSetName)
