@@ -331,7 +331,7 @@ def ViewOverview(setName, setFile):
 # Functions for viewing each card individually
 
 
-# The following functions contain complex algorithms
+# The following two functions contain complex algorithms
 
 # Function for performing a Merge Sort on a given list containing integer or string values
 def MergeSort(list0):

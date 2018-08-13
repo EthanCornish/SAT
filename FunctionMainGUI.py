@@ -1,14 +1,16 @@
+# Import Lines for external python libraries
+
 # Importing everything in the tkinter library
 # tkinter library is used in creating the gui
 from tkinter import *
-# Specifically importing the messagebox widget from tkinter. Could not call widget without specific import line
+# Specifically importing the message box widget from tkinter. Could not call widget without specific import line
 from tkinter import messagebox
 # Importing Items from Photo Imaging Library to allow images to be shown in the program
-from PIL import ImageTk, Image
+from PIL import Image
 
 # Importing Functions from FunctionsCLI file.
 # The Merge Sort and Binary Search functions are not included as they are called from within FunctionsCLI only.
-from FunctionsCLI import *
+from FunctionsCLI import ListSetCreate, SaveSet, DeleteSet, SelectSet, ImportSet, RndCardOrder
 
 
 # The Class that contains all of the GUI component
@@ -508,7 +510,7 @@ class GUI:
             self.FmeTableEdit.grid(row=2, column=1, rowspan=(len(self.cards) * 3) + (len(self.cards)) + 3, columnspan=3)
 
             # Change the text on the button
-            self.VarEditSaveBtnText.set('View Set')
+            self.VarEditSaveBtnText.set('Save Changes')
 
         # If the table is in edit mode
         elif status == 1:
@@ -1154,7 +1156,10 @@ class GUI:
 
                 # Widget 6
                 self.VarStarUnstarText = StringVar()
-                self.VarStarUnstarText.set('Star')
+                if self.cards[number][3].get() == 'no':
+                    self.VarStarUnstarText.set('Star')
+                elif self.cards[number][3].get() == 'yes':
+                    self.VarStarUnstarText.set('Unstar')
                 self.BtnStarUnstar = Button(self.FmePage3View, textvariable=self.VarStarUnstarText, width=12, command=lambda *args: self.ViewStarUnstar(number))
                 self.BtnStarUnstar.config(font=('Times', 16))
                 self.BtnStarUnstar.grid(row=6, column=7, rowspan=1, columnspan=1)
@@ -1239,12 +1244,16 @@ class GUI:
             self.cards[number][3].set('yes')
             # Inform the user
             messagebox.showinfo('Star and Unstar', ' The card has been starred.')
+            # Change the button to read 'Unstar'
+            self.VarStarUnstarText.set('Unstar')
         # If the card is starred
         elif self.cards[number][3].get() == 'yes':
             # Unstar the card
             self.cards[number][3].set('no')
             # Inform the user
             messagebox.showinfo('Star and Unstar',' The card has been un-starred.')
+            # Change the button to read 'Star'
+            self.VarStarUnstarText.set('Star')
 
     # Function to go to the previous card           COMPLETE
     def ViewPrevious(self, master, number):
@@ -1351,111 +1360,191 @@ class GUI:
         self.ViewPage(master, number)
 
         
-    # Function for the Help Page                    Needs Text
+    # Function for the Help Page which has a sub window         Needs Text
+    # The widgets in the sub window are created in the while loop and the text is determined using the sub function
     def HelpPage(self):
-        # Contains a sub function
-        # Needs text which will be added last after final changed
+        # While loop with variable to make the program easier to condense and therefore improve readability
         self.HelpPageContents = True
         while self.HelpPageContents:
+            # Creating the sub window with title
             self.WinHelp = Toplevel(root)
             self.WinHelp.title('Help')
 
+            # Creating a frame to contain all of the widgets and placing it in the grid
             self.FmeHelpPage = Frame(self.WinHelp)
             self.FmeHelpPage.grid()
 
+            # Creating a title widget, setting the size, colour and font and, placing it in the grid
             self.LblHpTitle = Label(self.FmeHelpPage, text='Help', bg='Orange', width=35, height=1)
             self.LblHpTitle.config(font=('Arail', 52, 'bold underline'))
             self.LblHpTitle.grid(row=0, column=0, rowspan=1, columnspan=9)
 
-            self.LblHpInstructions = Label(self.FmeHelpPage, text='Select the Button that'
-                                                                  'corresponding to the area you need help with.')
+            # Creating a label to provide some short instructions on using the sub window, setting the font and placing it in the grid
+            self.LblHpInstructions = Label(self.FmeHelpPage, text='Select the Button which'
+                                                                  ' corresponds to the area you need help with.')
             self.LblHpInstructions.config(font=('Times', 18))
             self.LblHpInstructions.grid(row=1, column=0, columnspan=9)
 
+            # Creating buttons to show different text for different area's of the program.
+            # Buttons all call the same command, integer argument tells the function which button was pressed and therefore which set of text to display
+
+            # Button for program navigation
             self.BtnHp1Navigation = Button(self.FmeHelpPage, text='General Use', width=10, command=lambda *args: HpText(self, 1))
             self.BtnHp1Navigation.config(font=('Times', 16))
             self.BtnHp1Navigation.grid(row=2, column=0, rowspan=1, columnspan=1)
 
+            # Button for creating sets
             self.BtnHp2Creating = Button(self.FmeHelpPage, text='Creating Sets', command=lambda *args: HpText(self, 2))
             self.BtnHp2Creating.config(font=('Times', 16))
             self.BtnHp2Creating.grid(row=2, column=1)
 
+            # Button for Editing Sets
             self.BtnHp3Editing = Button(self.FmeHelpPage, text='Editing Sets', command=lambda *args: HpText(self, 3))
             self.BtnHp3Editing.config(font=('Times', 16))
             self.BtnHp3Editing.grid(row=2, column=2)
 
+            # Button for Selecting Sets
             self.BtnHp4Select = Button(self.FmeHelpPage, text='Selecting Different Sets', command=lambda *args: HpText(self, 4))
             self.BtnHp4Select.config(font=('Times', 16))
             self.BtnHp4Select.grid(row=2, column=3)
 
+            # Button for Viewing an Overview of Sets
             self.BtnHp5ViewOverview = Button(self.FmeHelpPage, text='Viewing an Overview of a Set',
                                              command=lambda *args: HpText(self, 5))
             self.BtnHp5ViewOverview.config(font=('Times', 16))
             self.BtnHp5ViewOverview.grid(row=2, column=4)
 
-            self.BtnHp6Viewing = Button(self.FmeHelpPage, text='Viewing Sets',
-                                        command=lambda *args: HpText(self, 6))
+            # Button for viewing sets
+            self.BtnHp6Viewing = Button(self.FmeHelpPage, text='Viewing Sets', command=lambda *args: HpText(self, 6))
             self.BtnHp6Viewing.config(font=('Times', 16))
             self.BtnHp6Viewing.grid(row=2, column=5)
 
-            self.BtnHp7DeletingSets = Button(self.FmeHelpPage, text='Deleting Sets',
-                                             command=lambda *args: HpText(self, 7))
+            # Button for deleting sets
+            self.BtnHp7DeletingSets = Button(self.FmeHelpPage, text='Deleting Sets', command=lambda *args: HpText(self, 7))
             self.BtnHp7DeletingSets.config(font=('Times', 16))
             self.BtnHp7DeletingSets.grid(row=2, column=6)
 
-            self.BtnHp8ImportExport = Button(self.FmeHelpPage, text='Importing and Exporting Sets',
-                                             command=lambda *args: HpText(self, 8))
-            self.BtnHp8ImportExport.config(font=('Times', 16))
-            self.BtnHp8ImportExport.grid(row=2, column=7)
+            # Button for Importing Sets
+            self.BtnHp8Import = Button(self.FmeHelpPage, text='Importing Sets', command=lambda *args: HpText(self, 8))
+            self.BtnHp8Import.config(font=('Times', 16))
+            self.BtnHp8Import.grid(row=2, column=7)
 
+            # Button for exiting the help screed
+            # Command closes the sub window which ends the function
             self.BtnHp9ExitHelp = Button(self.FmeHelpPage, text='Exit Help', command=self.WinHelp.destroy)
             self.BtnHp9ExitHelp.config(font=('Times', 16))
             self.BtnHp9ExitHelp.grid(row=2, column=8)
 
+            # Creating a StringVar which will store the instructions being shown.
+            # Variable will be updated using sub function
             self.VarHpText = StringVar()
+            # By default setting it to many blank lines
             self.VarHpText.set('\n\n\n\n\n\n\n\n\n\n')
 
-            self.LblHpText = Label(self.FmeHelpPage, textvariable=self.VarHpText, width=155, height=10, anchor=NW)
-            self.LblHpText.config(font=('Times', 14))
+            # Placing the text in a label with a set width and height, setting the font and placing it in the grid
+            self.LblHpText = Label(self.FmeHelpPage, textvariable=self.VarHpText, width=155, height=12, anchor=NW, justify=LEFT)
+            self.LblHpText.config(font=('Times', 16))
             self.LblHpText.grid(row=3, column=0, rowspan=10, columnspan=9)
 
+            # Setting the while loop variable to False and therefore ending the while loop after one iteration
             self.HelpPageContents = False
 
-        # Function to desplay the correct text
+        # Sub function to change the text displayed
+        # input argument determines the text being shown
         def HpText(self, input):
+            # Creating a string variable to contain the text that will be used to set the StringVar
             text = self.VarHpText.get()
+            # Ensuring that the input argument is an integer to prevent a TypeError or a ValueError
             input = int(input)
+            # If, elif control structure that takes the given number and sets text to the correct string.
             if input == 1:
-                text=('This is the help information for navigating the program. It spans 10 lines and has a max width '
-                      'of 35 characters.\nline2\nline3\nline4\nline5\nline6\nline7\nline8\nline9\nline10')
+                text=('General Use\nThe program has three main pages, View Overview, Create and View.\nThe View Overview '
+                      'page shows all of the cards in the set on a table.\nThe Create page allows you to create a new '
+                      'set.\nThe View page shows each card one at a time in a sequance.\nThe View Overview page is shown '
+                      'by default and is the start-up page. The Create Page can be reached with the Create Set button.\n'
+                      'The Create Page can be closed using the Save Set button or the Cancel Set Creation button.\nThe '
+                      'View page can be reached from the View Overview page with the View Set button and can be exited '
+                      'using the Back button.\n\n')
             elif input == 2:
-                text=('This is the help information for Creating sets. It spans 10 lines and has a max width of 35 '
-                      'characters.\nline2\nline3\nline4\nline5\nline6\nline7\nline8\nline9\nline10')
+                text=('Creating sets\nTo enter the create set page select the Create Set button on the start-up page.\n'
+                      'The name of the set you are creating can be set by typing into the title on the top list of your '
+                      'screen.\nCards can be added using the table. Each row is a card and the cells are editable. '
+                      '(except the headers).\nIf nothing is entered then the default text will become part of the set.\n'
+                      'To enter an image type in its directory. Example: /Users/19ecornish/Desktop/image_5024.png   '
+                      'Images can be in any standard format. Including .jpg, .png, .jpeg, .gif (only stills)\nTo add or '
+                      'remove a row press the corresponding button. The table will regenerate but anything entered will '
+                      'remain. The rows will be added and removed from the end.\nHowever rows with your infomation can be '
+                      'cleared.\nWhen you are finished select Save Set to save your new set and return to the View Overview'
+                      ' screen. If there are any blank spaces you will not be able to save.\nIf you wish to return to '
+                      'the View Overview page without saving select the Cancel Set Creation button. You will need to '
+                      'confirm this action.\nIf you want to import a set select the Import Set button. This will bring '
+                      'up a new window. For instructions on importing sets select the button.\n')
             elif input == 3:
-                text=('Button 3')
+                text=('Editing Sets\nSets can be edited from the start-up screen. To begin editing select the Edit Set '
+                      'button.\nThis will turn the table into an editable version. Each cell can be changed.\nHowever '
+                      'the name of the set can not be changed and the amount of cards can not be changed.\nTo save any '
+                      'changes reselect the Edit Set button which will not read Save Changes.\nIf there are any blank '
+                      'spaces you will not be able to save.\nWARNING if you enter another page by selecting Create Set '
+                      'or View Set your changes will not be save and may be lost permanently.\nChanges can also be lost '
+                      'if you change to a different set.\n\n\n\n')
             elif input == 4:
-                text=('Button 4')
+                text=('Selecting Sets\nTo select a different set first enter the name of the set you wish to select in '
+                      'the entry field.\nThe entry field is Case, Space and Character Sensitive. Anything other than the'
+                      ' exact name will not be recignised.\nAfter entering the exact name of the set select the Select S'
+                      'et button.\nThe program will then attempt to change the set. If the name was correct then the table'
+                      ' and the title will change.\nIf the name is incorrect then the program will inform you and you may'
+                      ' try again.\n\n\n\n\n\n')
             elif input == 5:
-                text=('Button 5')
+                text=('Viewing an Overview of Sets.\nThe first screen shown when the program is opened shows an overview '
+                      'of the last created set.\nThe set is shown in a table. The name of the set can also be seen in the'
+                      ' top left hand corner of the page.\nFor instructions on how to edit the set select the Editing Sets '
+                      'button.\nFor instructions on how to change the set select the Selecting Sets button.\nFor instruc'
+                      'tions on how to change the current page select the General Use button.\nOn the right hand side of'
+                      'the view overview screen are three sets of radio buttons with a label fro each set.\nThe radio '
+                      'buttons set options that change how a set is viewed.\nThe options are detailed in the Viewing Se'
+                      'ts instructions.\n\n\n')
             elif input == 6:
-                text=('Button 6')
+                text=('Viewing Sets\nSets can be viewed in a standard one card, one side at a time manner in the View S'
+                      'et Page. For information on navigating between pages select the General Use Button.\nBefore view'
+                      'ing a set select your viewing options. There are three viewing options that are set with the rad'
+                      'io buttons on the View Overview page.\nDefault Side determines if you want to the the term, defi'
+                      'nition or image for each card first. View determines if you want to see every card or just those'
+                      ' that you have marked as starred.\nCard Order determines if the cards will be shown in the order '
+                      'that they were created and appear on the table or in a randomised order.\nWhen in the view page the name of the set can be '
+                      'seen on the top right. The progresss label and number on the right show how far through the set y'
+                      'ou are.\nThe Star button stars the card so it will show if the View option is set to starred car'
+                      'ds only. If a card is starred then the button reads Unstar.\nTo show the previously viewed card '
+                      'select the Previous button.\nTo show the term for the current card select the Term button.\nTo s'
+                      'how the image for the currently viewed card select the Image button.\nTo show the definition for'
+                      ' the currently viewed card select the Definition button.\nTo show the next card select the Next '
+                      'button.')
             elif input == 7:
-                text=('Button 7')
+                text=('Deleting Sets.\nTo delete a set select the set you want to delete. For instructions of selecting'
+                      ' a set select the Selecting Sets button.\nTo delete the currently viewed set select the Delete S'
+                      'et button at the bottom of the View Overview page.\nThis will bring up a confirmation screen.\n'
+                      'Select yes if you wish to delete the set. This will delete the set instantly and forever.\nThe '
+                      'screen will then show the last created set.\n\n\n\n\n\n')
             elif input == 8:
-                text=('Button 8')
+                text=('Importing Sets.\nTo import a set select the button on the Create page. This will bring up a sub'
+                      ' window.\nEnter a name for the set you wish to import into the name entry field.\nEnter the dire'
+                      'ctory into the directory entry field. Then select the Import Set button.\nIf the importing was '
+                      'successful you will be notified. If the import was unsuccessful then nothing will happen.\nTo '
+                      'cancel importing select the Cancel Import button. This will take you back to the Create page.\n'
+                      '\nTo ensure a successful importation of a set check for a correct directory, file type and file '
+                      'format.\nExample Directory: /Users/19ecornish/Downloads/fileToImport.csv\nThe file MUST be a '
+                      '.csv\nThe file must have the following format; term,definition,image newline where each line re'
+                      'presents a new card.\n')
+            # Setting the StringVar to the changed text variable
             self.VarHpText.set(text)
-        # Will create a label to store all of the text and the text will be a variable that
-        # changed is a button is pressed. By default the label will be blank but have space for text in window by having
-        # hard coded width and height.
+            return
 
 
 
-# Code to create the window
+# Creating the root window and setting its size
 root = Tk()
 root.geometry('1000x800')
 
-# Code to create listSetName
-
+# Creating listSetName from the design
 listSetName = []
 # Reading listSetName file to the list.
 # Each line in the file is a set
@@ -1472,9 +1561,11 @@ except FileNotFoundError:
     listSetName = []
 
 # Setting the current/default set. Takes the last set on the listSetName list and records the setName and fileName
+# These variables are converted into StringVars in the GUI
 currentSetNameString = listSetName[-1][0]
 currentSetFileString = listSetName[-1][1]
 
+# Creating listSet from the design using the ListSetCreate function from FunctionsCLI
 listSet = ListSetCreate(currentSetFileString)
 
 
@@ -1483,7 +1574,8 @@ GUI = GUI(root)
 # Runs the window
 root.mainloop()
 
-# Writes listSetName to the file
+# Writes listSetName to the file after the window is closed. This code is important if new sets are created otherwise
+#       after the program is closed the program will not be able to access the newly created set.
 fileListSetName = open('fileListSetName.txt', 'w')
 for set in listSetName:
     fileListSetName.write(set[0])
