@@ -1021,7 +1021,7 @@ class GUI:
             # setFile argument is the variable that was just created and is a string
             # Function returns a boolean value. If true the file was read successfully
             #       If false then there was an error reading the file
-            self.check = ImportSet(listSetName, directory, setName, setFile)
+            self.check = ImportSet(directory, setName, setFile)
             # If the import was successful
             if self.check:
                 # Add the set to listSetName
@@ -1149,7 +1149,7 @@ class GUI:
                 if self.VarCardOrderInput.get() == 1:
                     self.VarProgress.set('{0}/{1}'.format((number + 1), len(self.cards)))
                 elif self.VarCardOrderInput.get() == 2:
-                    self.VarProgress.set('{0}/{1}'.format(len(self.shownCards), len(self.cards)))
+                    self.VarProgress.set('{0}/{1}'.format(len(self.shownCards)+1 - self.cycles, len(self.cards)))
                 self.LblProgressResults = Label(self.FmePage3View, textvariable=self.VarProgress, width=12, anchor='e')
                 self.LblProgressResults.config(font=('Times', 16))
                 self.LblProgressResults.grid(row=3, column=7, rowspan=1, columnspan=1)
