@@ -1,9 +1,10 @@
 set!,file!
-setA,fileA
-setB,file_setB
-setC,file_setC
-Enter Name Here,file_Enter Name Here
-setD,file_setD
+setA,file_setA
 Boating Images,file_Boating Images
 setImages,file_setImages
-importingSets,file_importingSets
+setB,file_setB
+setC,file_setC
+setH,file_setH
+setI,file_setI
+setD,file_setD
+setE,file_setE
