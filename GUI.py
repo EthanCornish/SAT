@@ -1,3 +1,19 @@
+'''
+Program: Digital Flash Card System
+Creator: Ethan Cornish
+Date of Creation of Project: 2/7/2018
+Date Modified: 5/9/2018
+
+Created for VCE Software Development Unit 3 and 4 at MLMC 2018
+
+Program is a flashcard system that allows the user to create a set of flashcards and view their sets.
+
+
+This file contains all of the code relevant to the GUI and a main block at the end to initalise the window, create a
+ main list from a file and set key variables.
+'''
+
+
 # Import Lines for external python libraries
 
 # Importing everything in the tkinter library
@@ -15,7 +31,7 @@ from Functions import ListCardsCreate, SaveSet, DeleteSet, SelectSet, ImportSet,
 
 # The Class that contains all of the GUI component
 class GUI:
-    # Initialisation Function                       INITIAL FUNCTION
+    # Initialisation Function
     def __init__(self, master):
         # Defining master and giving the root window a title
         self.master = master
@@ -24,7 +40,8 @@ class GUI:
         # Calling the ViewOverview page to appear by default
         self.ViewOverviewPage(self.master)
 
-    # Function for the ViewOverview Page            PAGE FUNCTION
+
+    # Function for the ViewOverview Page
     # master argument is the root window
     def ViewOverviewPage(self, master):
         # Define variables to store the name and the file of the current set
@@ -208,7 +225,8 @@ class GUI:
         # Places the top frame on the grid
         self.fmePage1ViewOverview.grid(column=0, row=0, columnspan=3)
 
-    # Function to create the table in ViewOverview  PAGE CHILD FUNCTION
+
+    # Function to create the table in ViewOverview
     def ViewOverviewTable(self, lstCards):
 
         self.count = 0
@@ -460,7 +478,8 @@ class GUI:
                     self.lblBorder.grid(row=i, column=j)
                     self.border.append(self.lblBorder)
 
-    # Function to change the currently viewed set   COMPLETE
+
+    # Function to change the currently viewed set
     def ViewOverviewSelect(self):
         # Call the Select Set Function from FunctionsCLI with input from entry field as wantedSet argument.
         # Use the function to gain the index position of the wanted set
@@ -480,8 +499,8 @@ class GUI:
         # Recall the table function to update the table with the new list
         self.ViewOverviewTable(lstCards)
 
+
     # Function for the ViewOverview Page to change to table from label to entry
-    #                                               COMPLETE
     def ViewOverviewEditSaveBtn(self):
         # Define status variable to store if the table is currently showing the view or edit version
         status = self.varEditSaveBtnInt.get()
@@ -539,7 +558,8 @@ class GUI:
         # Set the status intVar to the status integer variable
         self.varEditSaveBtnInt.set(status)
 
-    # Function to delete the current set            COMPLETE
+
+    # Function to delete the current set
     # listSetName argument is listSetName from the design
     def ViewOverviewDelete(self, listSetName):
         # Uses an askyesno message box to recive confirmation from the user about deleting the set
@@ -563,7 +583,8 @@ class GUI:
             # Exit the function
             return
 
-    # Function for the Create Page                  PAGE FUNCTION
+
+    # Function for the Create Page
     # master argument is the root window
     def CreatePage(self, master):
         # Remove the frame containing ViewOverviewPage
@@ -654,7 +675,8 @@ class GUI:
         # Places the top frame on the grid
         self.fmePage2CreateSet.grid(row=0, column=0)
 
-    # Function to create the table in Create Page   PAGE CHILD FUNCTION
+
+    # Function to create the table in Create Page
     def CreateTable(self):
 
         # Creating List of StringVars with default values that act as an existence check and an instruction
@@ -807,8 +829,8 @@ class GUI:
                     self.lblBorder.grid(row=i, column=j)
                     self.border.append(self.lblBorder)
 
+
     # Function to save the set that has just been made and change the screen back to ViewOverview
-    #                                               COMPLETE
     def CreateSave(self):
         # Reading the table list in to a list of lists of strings
         self.lstCardsCreateString = []
@@ -850,7 +872,7 @@ class GUI:
         # Returning to the ViewOverview Screen
         self.ViewOverviewPage(self.master)
 
-    # Function to change the amount of rows in the table      COMPLETE
+    # Function to change the amount of rows in the table
     # numRow argument is the amount of rows in the table
     # change argument is if the function needs to add a row or remove a row
     def CreateChangeRow(self, numRow, change):
@@ -901,7 +923,8 @@ class GUI:
         # Recalling the table creation function
         self.CreateTable()
 
-    # Function to delete the set being made         COMPLETE
+
+    # Function to delete the set being made
     # Button reads 'Cancel Set Creation'
     def CreateDelete(self):
         # Create a variable to store the text that will be shown in the user notification to make the next line easier to read
@@ -916,7 +939,8 @@ class GUI:
             self.ViewOverviewPage(self.master)
             return
 
-    # Function to import a set                      COMPLETE
+
+    # Function to import a set
     # Has a sub window and a function for the functionality which calls a function in FunctionsCLI
     def CreateImport(self):
 
@@ -1029,7 +1053,7 @@ class GUI:
                 # Removing the frame containing everything from the create page
                 self.fmePage2CreateSet.grid_remove()
                 # Returning to the ViewOverview Screen
-                self.ViewOverviewPage(self.master, self.currentSetName.get(), self.currentSetFile.get())
+                self.ViewOverviewPage(self.master)
             # If the import was not successful
             elif not self.check:
                 # Inform the user and provide some quick suggestions on what to check
@@ -1038,7 +1062,8 @@ class GUI:
                 # Exit the function
                 return
 
-    # Function for the View Page                    PAGE FUNCTION
+
+    # Function for the View Page
     def ViewPage(self, master, number):
 
         # Removing the frame containing ViewOverviewPage
@@ -1050,8 +1075,7 @@ class GUI:
         # Checks if there are more cards
         if number < len(self.lstCards):
             # If the user selected view all or view Fav AND the current card is a favourite
-            if self.varViewFullStarInput.get() == 1 or self.varViewFullStarInput.get() == 2 and self.lstCards[number]\
-                  [3].get() == 'yes':
+            if self.varViewFullStarInput.get() == 1 or self.varViewFullStarInput.get() == 2 and self.lstCards[number].varIsStar == 'yes':
 
                 # Widget 1
                 self.lblName = Label(self.fmePage3View, textvariable=self.currentSetName, width=23, bg='#7AEDFB')
@@ -1094,8 +1118,9 @@ class GUI:
                     # Setting the image method of the label to the image object
                     self.lblCardImg.image = self.ImgObj
                 except (FileExistsError, FileNotFoundError, IsADirectoryError, NotADirectoryError):
-                    messagebox.showinfo('File Error', 'Directory for this image is invalid.', icon='warning')
-                    self.ViewBack()
+                    print('Incorrect Error')
+                    self.lblCardImg = Label(self.fmeDisplay, text='Invalid Image Directory')
+                    self.lblCardImg.config(font=('Times', 32))
 
                 # Depending on what the default side is, place the correct label defined above on the grid
                 if self.varDefaultSideInput.get() == 1:
@@ -1218,9 +1243,9 @@ class GUI:
             messagebox.showinfo('Finished', 'All cards have been shown\nReturning to start-up screen.')
             self.ViewBack()
 
-    # Function to go back to ViewOverview Page      COMPLETE
+
+    # Function to go back to ViewOverview Page
     def ViewBack(self):
-        print('ViewBack Function Ran')
         # Rewriting self.lstCards as a list of strings
         self.lstCardsStrings = []
         for i in self.lstCards:
@@ -1238,7 +1263,8 @@ class GUI:
         self.ViewOverviewPage(self.master)
         return
 
-    # Function to Star/Unstar a card                COMPLETE
+
+    # Function to Star/Unstar a card
     def ViewStarUnstar(self, number):
         # If the card is not starred
         if self.lstCards[number].varIsStar == 'no':
@@ -1257,7 +1283,8 @@ class GUI:
             # Change the button to read 'Star'
             self.varStarUnstarText.set('Star')
 
-    # Function to go to the previous card           COMPLETE
+
+    # Function to go to the previous card
     def ViewPrevious(self, master, number):
         if self.varCardOrderInput.get() == 1:
             # Decreases the card counter by one
@@ -1269,7 +1296,7 @@ class GUI:
                     number -= 1
             # If there are no more cards then inform the user
             if number < 0:
-                messagebox.showinfo('No More Cards', 'There are no previous cards to go back to.')
+                messagebox.showinfo('No Previous Cards', 'There are no previous cards to go back to.')
                 return
         elif self.varCardOrderInput.get() == 2:
             # If only one card has been shown then the previous card is the first card
@@ -1294,7 +1321,7 @@ class GUI:
         self.fmePage3View.grid_remove()
         self.ViewPage(master, number)
 
-    # Function to show the term                    COMPLETE
+    # Function to show the term
     def ViewTerm(self):
         # Remove the currently shown definition or image
         # Try blocks are to catch the error that ocurs if the card is not showing the definition or the image
@@ -1309,7 +1336,7 @@ class GUI:
         # Place the term label in the grid
         self.lblCardTerm.grid(row=1, column=1)
 
-    # Function to show the image                   COMPLETE
+    # Function to show the image
     def ViewImage(self):
         # Remove the currently shown term or definition
         # Try blocks are to catch the error that ocurs if the card is not showing the term or the definition
@@ -1324,7 +1351,7 @@ class GUI:
         # Place the image label in the grid
         self.lblCardImg.grid(row=1, column=1)
 
-    # Function to show the definition              COMPLETE
+    # Function to show the definition
     def ViewDef(self):
         # Remove the currently shown term or image
         # Try blocks are to catch the error that ocurs if the card is not showing the term or the image
@@ -1339,21 +1366,22 @@ class GUI:
         # Place the definition label in the grid
         self.lblCardDef.grid(row=1, column=1)
 
-    # Function to go to the next card               COMPLETE
+    # Function to go to the next card
     def ViewNext(self, master, number):
         # If the card order is set to Original
         if self.varCardOrderInput.get() == 1:
             # Continue to the next card
             number += 1
+        # If the car order is set to Random
         elif self.varCardOrderInput.get() == 2:
             # Rewriting self.lstCards as a list of strings
             self.lstCardsStrings = []
             for i in self.lstCards:
                 self.lstCardsStringsSub = []
-                self.lstCardsStringsSub.append(i[0].get())
-                self.lstCardsStringsSub.append(i[1].get())
-                self.lstCardsStringsSub.append(i[2].get())
-                self.lstCardsStringsSub.append(i[3].get())
+                self.lstCardsStringsSub.append(i.varTerm)
+                self.lstCardsStringsSub.append(i.varDef)
+                self.lstCardsStringsSub.append(i.varImg)
+                self.lstCardsStringsSub.append(i.varIsStar)
                 self.lstCardsStrings.append(self.lstCardsStringsSub)
             # Calling RndCardOrder function from FunctionsCLI to change to the next card in a randomised order
             number = RndCardOrder(number, self.lstCardsStrings, self.shownCards)
@@ -1361,7 +1389,7 @@ class GUI:
         self.fmePage3View.grid_remove()
         self.ViewPage(master, number)
 
-    # Function for the Help Page which has a sub window         Needs Text
+    # Function for the Help Page which has a sub window
     # The widgets in the sub window are created in the while loop and the text is determined using the sub function
     def HelpPage(self):
         # While loop with variable to make the program easier to condense and therefore improve readability
@@ -1570,7 +1598,16 @@ try:
         listSetName.append(line)
     fileListSetName.close()
 except FileNotFoundError:
+    print('listSetName does not exist Initiation Measure Running')
     listSetName = []
+    listSetName.append(['My First Set', 'file_My First Set.txt'])
+    file_myFirstSet = open('file_My First Set.txt', 'w')
+    file_myFirstSet.write('My First Set\n')
+    count = 1
+    while count <= 15:
+        file_myFirstSet.write('Term {0}, Definition {0},Image Directory {0},no,\n'.format(count))
+        count += 1
+    file_myFirstSet.close()
 
 # Setting the current/default set. Takes the last set on the listSetName list and records the setName and fileName
 # These variables are converted into StringVars in the GUI

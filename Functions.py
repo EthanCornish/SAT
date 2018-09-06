@@ -1,8 +1,15 @@
 '''
-File contains function for components of the program
-Does not include ExportSet function
-'''
+Program: Digital Flash Card System
+Creator: Ethan Cornish
+Date of Creation of Project: 2/7/2018
+Date Modified: 5/9/2018
 
+Created for VCE Software Development Unit 3 and 4 at MLMC 2018
+
+Program is a flashcard system that allows the user to create a set of flashcards and view their sets.
+
+File contains key functions for the operation of the files. Functions do not directly relate to the GUI.
+'''
 
 # os library used to delete files. Used in DeleteSet Function
 import os
@@ -11,19 +18,20 @@ import csv
 # random library used to generate random numbers. Used in CardOrderRnd function which is called in ViewSet Function
 import random
 
+
+
+# Class to create lstCards use a list of class objects instead of a list of lists.
 class clsListCards:
+    # Initial Function that takes four arguments from the each line in the file and converts
+    #   the strings into clsListCards objects
     def __init__(self, term, definition, img, isStar):
         self.varTerm = term
         self.varDef = definition
         self.varImg = img
         self.varIsStar = isStar
 
-    def PrintCard(self):
-        print(str(self.varTerm) + ',', str(self.varDef) + ',', str(self.varImg) + ',', str(self.varIsStar))
 
-
-
-# Function to create listSet as it is detailed in the design            COMPLETE
+# Function to create listSet as it is detailed in the design
 # setFile is the name of the file the set is stored in
 def ListCardsCreate(setFile):
     # Opening the given file and defining listSet
@@ -43,6 +51,7 @@ def ListCardsCreate(setFile):
         listCards.append(clsListCards(line[0], line[1], line[2], line[3]))
 
     return listCards
+
 
 # Function to create listSet which contains listCard
 # setFile is the name of the file the set is stored in
@@ -70,9 +79,6 @@ def ListSetCreate(setFile):
     return listSet
 
 
-
-
-
 # Function for saving sets
 # setName is the name of the set that is being edited
 # setFile is the name of the file the set is in
@@ -91,8 +97,6 @@ def SaveSet(setName, setFile, listCards):
         file.write('\n')
     file.close()
     return
-
-
 
 
 # Function for deleting sets
@@ -115,6 +119,7 @@ def DeleteSet(listSetName, setName, setFile):
         position += 1
     # If this line is reached then the set does not exist and therefore for all intents and purposes has been deleted
     return listSetName
+
 
 # Function to change the currently viewed set
 # listSetName is a list of lists that stores the name and file name for each set
@@ -183,6 +188,7 @@ def ImportSet(setDirectory, setName, setFile):
 # The following two functions contain complex algorithms
 
 # Function for performing a Merge Sort on a given list containing integer or string values
+# list0 is a given list to sort. Has 0 in the name to link it to the count0 variable used inside the function
 def MergeSort(list0):
     # Checks if the given list contains 1 or no items. If it does than the list is sorted.
     if len(list0) == 1 or len(list0) == 0:
@@ -247,7 +253,6 @@ def MergeSort(list0):
 # list argument is a sorted list that can contain integers or strings
 # wanted argument is the value that is being looked for. Can be an integer or a string
 def BinarySearch(list, wanted):
-
     # Define a variable to store the start point in the segment of the list the is being used
     first = int(0)
     # Define a variable to store the end point in the segment of the list the is being used
