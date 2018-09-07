@@ -1077,12 +1077,12 @@ class GUI:
             # If the user selected view all or view Fav AND the current card is a favourite
             if self.varViewFullStarInput.get() == 1 or self.varViewFullStarInput.get() == 2 and self.lstCards[number].varIsStar == 'yes':
 
-                # Widget 1
+                # Title (setName) label
                 self.lblName = Label(self.fmePage3View, textvariable=self.currentSetName, width=23, bg='#7AEDFB')
                 self.lblName.config(font=('Arail', 32, 'bold underline'))
                 self.lblName.grid(row=0, column=0, rowspan=1, columnspan=5)
 
-                # Widget 2
+                # Frame containing the card
                 self.fmeDisplay = Frame(self.fmePage3View)
                 self.fmeDisplay.grid(row=2, column=1, rowspan=9, columnspan=5)
 
@@ -1118,7 +1118,6 @@ class GUI:
                     # Setting the image method of the label to the image object
                     self.lblCardImg.image = self.ImgObj
                 except (FileExistsError, FileNotFoundError, IsADirectoryError, NotADirectoryError):
-                    print('Incorrect Error')
                     self.lblCardImg = Label(self.fmeDisplay, text='Invalid Image Directory')
                     self.lblCardImg.config(font=('Times', 32))
 
@@ -1158,27 +1157,12 @@ class GUI:
                 self.lblBorder8.config(font=('Times', 16))
                 self.lblBorder8.grid(row=2, column=2)
 
-                # Widget 3
+                # 'Back' button to take the user back to the View Overview Page
                 self.btnBack = Button(self.fmePage3View, text='Back', width=24, command=self.ViewBack)
                 self.btnBack.config(font=('Times', 16))
                 self.btnBack.grid(row=0, column=5, rowspan=1, columnspan=3)
 
-                # Widget 4
-                self.lblProgressLabel = Label(self.fmePage3View, text='Progress:', width=12)
-                self.lblProgressLabel.config(font=('Times', 16))
-                self.lblProgressLabel.grid(row=2, column=7, rowspan=1, columnspan=1)
-
-                # Widget 5                              WIP May need function to account for viewing option
-                self.varProgress = StringVar()
-                if self.varCardOrderInput.get() == 1:
-                    self.varProgress.set('{0}/{1}'.format((number + 1), len(self.lstCards)))
-                elif self.varCardOrderInput.get() == 2:
-                    self.varProgress.set('{0}/{1}'.format(len(self.shownCards) + 1 - self.cycles, len(self.lstCards)))
-                self.lblProgressResults = Label(self.fmePage3View, textvariable=self.varProgress, width=12, anchor='e')
-                self.lblProgressResults.config(font=('Times', 16))
-                self.lblProgressResults.grid(row=3, column=7, rowspan=1, columnspan=1)
-
-                # Widget 6
+                # 'Star'/'Unstar' button to star or unstar individual flashcards
                 self.varStarUnstarText = StringVar()
                 if self.lstCards[number].varIsStar == 'no':
                     self.varStarUnstarText.set('Star')
@@ -1189,33 +1173,33 @@ class GUI:
                 self.btnStarUnstar.config(font=('Times', 16))
                 self.btnStarUnstar.grid(row=6, column=7, rowspan=1, columnspan=1)
 
-                # Widget 7
+                # 'Help' button to launch the Help sub window
                 self.btnHelp = Button(self.fmePage3View, text='Help', width=12, command=self.HelpPage)
                 self.btnHelp.config(font=('Times', 16))
                 self.btnHelp.grid(row=9, column=7, rowspan=1, columnspan=1)
 
-                # Widget 8
+                # 'Previous' button to take the user back a page
                 self.btnPrevious = Button(self.fmePage3View, text='Previous', width=8,
                                           command=lambda *args: self.ViewPrevious(master, number))
                 self.btnPrevious.config(font=('Times', 16))
                 self.btnPrevious.grid(row=11, column=1, rowspan=1, columnspan=1)
 
-                # Widget 9
+                # 'Term' button to show the term of the current card
                 self.btnTerm = Button(self.fmePage3View, text='Term', width=8, command=self.ViewTerm)
                 self.btnTerm.config(font=('Times', 16))
                 self.btnTerm.grid(row=11, column=2, rowspan=1, columnspan=1)
 
-                # Widget 10
+                # 'Image' button to show the image of the current card
                 self.btnImage = Button(self.fmePage3View, text='Image', width=8, command=self.ViewImage)
                 self.btnImage.config(font=('Times', 16))
                 self.btnImage.grid(row=11, column=3, rowspan=1, columnspan=1)
 
-                # Widget 11
+                # 'Definition' button  to show the definition for the current card
                 self.btnDef = Button(self.fmePage3View, text='Definition', width=8, command=self.ViewDef)
                 self.btnDef.config(font=('Times', 16))
                 self.btnDef.grid(row=11, column=4, rowspan=1, columnspan=1)
 
-                # Widget 12
+                # 'Next' button to show the next card
                 self.btnNext = Button(self.fmePage3View, text='Next', width=8,
                                       command=lambda *args: self.ViewNext(master, number))
                 self.btnNext.config(font=('Times', 16))
@@ -1224,7 +1208,7 @@ class GUI:
                 # Blank Spaces
                 blanks = [[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], [1, 12], [1, 12], [1, 12], [1, 12], [1, 12],
                           [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-                          [1, 4, 5, 7, 8, 10, 11, 12], [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]]
+                          [1, 2, 3, 4, 5, 7, 8, 10, 11, 12], [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]]
                 self.countBlank = 0
                 while self.countBlank < 9:
                     for i in blanks[self.countBlank]:
@@ -1273,7 +1257,7 @@ class GUI:
             # Inform the user
             messagebox.showinfo('Star and Unstar', ' The card has been starred.')
             # Change the button to read 'Unstar'
-            self.varStarUnstarText.varIsStar = 'Unstar'
+            self.varStarUnstarText.set('Unstar')
         # If the card is starred
         elif self.lstCards[number].varIsStar == 'yes':
             # Unstar the card

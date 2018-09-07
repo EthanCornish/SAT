@@ -163,9 +163,12 @@ def ImportSet(setDirectory, setName, setFile):
     # If the file is not formatted correctly
     except UnicodeDecodeError or IndexError:
         return False
-    # Creating listSet from the design
-    listSet = [setName, listCard]
+
     importFile.close()
+
+    # Adding the isFav part of each card
+    for i in listCard:
+        i.append('no')
 
     # Saving the set to a file
     # Opening the file
@@ -174,7 +177,7 @@ def ImportSet(setDirectory, setName, setFile):
     file.write(setName)
     file.write('\n')
     # Add each card in the list as a seperate line, indexes seperated by commas
-    for a in listSet[1]:
+    for a in listCard:
         for b in a:
             file.write(b)
             file.write(',')

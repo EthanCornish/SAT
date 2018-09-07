@@ -5,35 +5,6 @@ setH,file_setH
 setI,file_setI
 setD,file_setD
 setE,file_setE
-setImages,file_setImages
-set2,file_set2
-set3,file_set3
-set3,file_set3
-set4,file_set4
-set5,file_set5
-set6,file_set6
-set7,file_set7
-set8,file_set8
-set9,file_set9
-set10,file_set10
-set11,file_set11
-set12,file_set12
-set13,file_set13
-set14,file_set14
-set15,file_set15
-set16,file_set16
-set17,file_set17
-set18,file_set18
-set19,file_set19
-set20,file_set20
-set21,file_set21
-Enter Name of Set,file_Enter Name of Set
-set21,file_set21
-set22,file_set22
-set23,file_set23
-set24,file_set24
-set25,file_set25
-set26,file_set26
 50Cards,file_50Cards
 50Cards,file_50Cards
 paragraphString,file_paragraphString
@@ -42,3 +13,5 @@ paragraphString,file_paragraphString
 image,file_image
 testSet,file_testSet
 Imported Set,file_Imported Set
+setImages,file_setImages
+importSetIsFavTest,file_importSetIsFavTest
